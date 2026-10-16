@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=65", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kurcf-repro"
+version = "0.1.0"
+description = "Independent reproduction of KUR-CF (Scientific Reports, 2025)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+dependencies = ["numpy>=1.24,<3"]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0", "scikit-learn>=1.2"]
+analysis = ["scikit-learn>=1.2", "matplotlib>=3.6"]
+
+[project.scripts]
+kurcf = "kurcf.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

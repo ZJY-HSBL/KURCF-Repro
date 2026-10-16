@@ -26,6 +26,7 @@ def download_movielens(name: str, root: str | Path = "data") -> Path:
         return location
     root.mkdir(parents=True, exist_ok=True)
     archive_path = root / f"{name}.zip"
+    location.mkdir(parents=True, exist_ok=True)
     if not archive_path.exists():
         urllib.request.urlretrieve(DATASETS[name][0], archive_path)
     with zipfile.ZipFile(archive_path) as archive:

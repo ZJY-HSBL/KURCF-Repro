@@ -1,0 +1,59 @@
+{
+  "configuration": {
+    "dataset": "ml-1m",
+    "seed": 42,
+    "train_interactions": 800193,
+    "test_interactions": 200016,
+    "clusters": 6,
+    "neighbors": 20,
+    "alpha": 0.3,
+    "top_k": 10,
+    "rating_cases": 300,
+    "ranking_users": 30,
+    "note": "Independent randomized split; does not claim identical paper partitions."
+  },
+  "results": {
+    "kurcf": {
+      "mae": 0.762627300266492,
+      "rmse": 0.9746598444408197,
+      "n": 300,
+      "precision_at_k": 0.016666666666666666,
+      "recall_at_k": 0.009157509157509158,
+      "hits": 5,
+      "recommended": 300,
+      "positives": 546,
+      "users": 30,
+      "k": 10,
+      "fit_seconds": 3.0296,
+      "total_seconds": 30.19
+    },
+    "usercf": {
+      "mae": 0.7758099795697508,
+      "rmse": 0.9639118760049799,
+      "n": 300,
+      "precision_at_k": 0.016666666666666666,
+      "recall_at_k": 0.009157509157509158,
+      "hits": 5,
+      "recommended": 300,
+      "positives": 546,
+      "users": 30,
+      "k": 10,
+      "fit_seconds": 1.7451,
+      "total_seconds": 62.9653
+    },
+    "cluster-pearson": {
+      "mae": 0.7798718407539089,
+      "rmse": 0.9870550346831847,
+      "n": 300,
+      "precision_at_k": 0.02666666666666667,
+      "recall_at_k": 0.014652014652014652,
+      "hits": 8,
+      "recommended": 300,
+      "positives": 546,
+      "users": 30,
+      "k": 10,
+      "fit_seconds": 2.9615,
+      "total_seconds": 20.1602
+    }
+  }
+}

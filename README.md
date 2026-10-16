@@ -4,7 +4,7 @@ Independent Python implementation of the variance-weighted K-means collaborative
 
 **Original research:** Zhang, S., Chen, S., Yu, X. & Mei, S., *Research on collaborative filtering algorithm based on improved K-means algorithm for user attribute rating and co-rating*. **Scientific Reports** 15, 19600 (2025). https://doi.org/10.1038/s41598-025-96705-0
 
-[中文文档](README.zh-CN.md) | [Methodology and limitations](docs/reproduction-notes.md)
+[中文文档](README.zh-CN.md) | [Methodology and limitations](docs/reproduction-notes.md) | [Observed MovieLens benchmarks](benchmarks/README.md)
 
 > This repository is **not the original authors' source code**. Its implementation decisions are documented. The paper's reported numerical gains have **not yet been independently reproduced**.
 

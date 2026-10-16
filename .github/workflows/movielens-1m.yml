@@ -1,0 +1,38 @@
+name: MovieLens 1M smoke benchmark
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/movielens-1m.yml"
+      - "src/**"
+      - "pyproject.toml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .
+      - name: Download official MovieLens 1M
+        run: kurcf download --dataset ml-1m
+      - name: Run disclosed small-sample 1M experiment
+        run: |
+          kurcf benchmark --dataset ml-1m --models kurcf usercf cluster-pearson \
+            --seed 42 --clusters 6 --neighbors 20 --alpha 0.3 \
+            --rating-cases 300 --ranking-users 30 --top-k 10 \
+            --output results/ml1m-smoke.json
+      - name: Upload metric JSON
+        uses: actions/upload-artifact@v4
+        with:
+          name: ml1m-smoke-results
+          path: results/ml1m-smoke.json

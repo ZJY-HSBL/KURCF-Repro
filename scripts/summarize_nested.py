@@ -8,7 +8,34 @@ from html import escape
 import json
 from pathlib import Path
 
-from scripts.summarize_study import stats
+import math
+import random
+import statistics
+
+
+def _percentile(values: list[float], q: float) -> float:
+    if len(values) == 1:
+        return values[0]
+    index = (len(values) - 1) * q
+    a, b = math.floor(index), math.ceil(index)
+    return values[a] + (index - a) * (values[b] - values[a])
+
+
+def stats(values: list[float]) -> dict:
+    """Sample SD and 95% seed-bootstrap CI; deterministic across invocations."""
+    if not values or any(not math.isfinite(v) for v in values):
+        raise ValueError("non-finite or missing measurements")
+    rng = random.Random(20261017)
+    draws = sorted(
+        statistics.mean(values[rng.randrange(len(values))] for _ in values)
+        for _ in range(4000)
+    )
+    return {
+        "mean": statistics.mean(values),
+        "sd": statistics.stdev(values) if len(values) > 1 else 0.0,
+        "ci95": [_percentile(draws, .025), _percentile(draws, .975)],
+        "n_seeds": len(values),
+    }
 
 METRICS = ("mae", "rmse", "precision_at_k", "recall_at_k")
 VARIANTS = ("fixed_kurcf", "selected_kurcf", "cluster_jaccard",

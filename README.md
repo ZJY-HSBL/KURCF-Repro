@@ -37,106 +37,83 @@ This project studies **KUR-CF**, a user-based collaborative filtering method tha
 
 ## 2. Mathematical formulation
 
+**Mobile-friendly equations.** All mathematical expressions below are stored as SVG images, rendered from [editable LaTeX source](assets/equations/formulas.json) using [MathJax](scripts/render_equations.cjs). This avoids the raw LaTeX display issue in some versions of the GitHub mobile app.
+
 ### 2.1 User–attribute rating matrix — Eq. (3)
 
-Let $m$ be the number of users, $p$ the number of movies, and $d$ the number of movie attributes (genre indicators in this implementation). Define the **training-only** user–movie rating matrix $X\in\mathbb{R}^{m\times p}$ and the movie–attribute matrix $Y\in\{0,1\}^{p\times d}$. Missing ratings contribute zero to this matrix product.
+Let m be the number of users, p the number of movies, and d the number of movie attributes (genre indicators in this implementation). Define the **training-only** user–movie rating matrix `X` (m × p) and the movie–attribute matrix `Y` (p × d, binary). Missing ratings contribute zero to this matrix product.
 
-$$
-Z = XY,\qquad Z\in\mathbb{R}^{m\times d},
-\qquad Z_{uj}=\sum_{i=1}^{p}X_{ui}Y_{ij}.
-\tag{3}
-$$
+![Eq. (3) — user–attribute rating matrix](assets/equations/eq03-user-attribute.svg)
 
-$Z_{uj}$ aggregates the ratings user $u$ assigned to movies having attribute $j$. It is a **sum**, not a normalized mean: prolific users can therefore have larger profile magnitudes. The code follows this paper-described construction.
+*Eq. (3) — user–attribute rating matrix.*
+
+`Z[u,j]` aggregates the ratings user u assigned to movies having attribute j. It is a **sum**, not a normalized mean: prolific users can therefore have larger profile magnitudes. The code follows this paper-described construction.
 
 ### 2.2 Variance-based feature weighting — Eqs. (4)–(5)
 
-For attribute $j$, the implementation uses the population variance across the $m$ training users:
+For attribute j, the implementation uses the population variance across the m training users:
 
-$$
-\mu_j=\frac{1}{m}\sum_{u=1}^{m}Z_{uj},
-\qquad
-\sigma_j^2=\frac{1}{m}\sum_{u=1}^{m}(Z_{uj}-\mu_j)^2.
-\tag{4}
-$$
+![Eq. (4) — attribute variance](assets/equations/eq04-variance.svg)
 
-$$
-w_j=\frac{\sigma_j^2}{\sum_{\ell=1}^{d}\sigma_\ell^2},
-\qquad
-w_j\ge 0,\qquad \sum_{j=1}^{d}w_j=1.
-\tag{5}
-$$
+*Eq. (4) — attribute variance.*
 
-A feature with higher variance receives greater weight. If all feature variances are zero, the code falls back to $w_j=1/d$; that fallback is an **engineering safeguard**, not an additional claim in the paper.
+![Eq. (5) — normalized variance weights](assets/equations/eq05-weights.svg)
+
+*Eq. (5) — normalized variance weights.*
+
+A feature with higher variance receives greater weight. If all feature variances are zero, the code falls back to `w[j] = 1/d`; that fallback is an **engineering safeguard**, not an additional claim in the paper.
 
 ### 2.3 Weighted K-means clustering — Eqs. (6)–(8)
 
 Users are clustered in attribute-profile space with the variance-weighted Euclidean distance
 
-$$
-d_w(z_u,c_k)=
-\sqrt{\sum_{j=1}^{d}w_j(Z_{uj}-c_{kj})^2}.
-\tag{6}
-$$
+![Eq. (6) — weighted Euclidean distance](assets/equations/eq06-distance.svg)
 
-Squared distances are used in the implementation when only the nearest center is required; this does not change the assignments. For a cluster $C_k$, first compute its mean and then project to the nearest **observed member** when projected centers are enabled:
+*Eq. (6) — weighted Euclidean distance.*
 
-$$
-\bar c_k=\frac{1}{|C_k|}\sum_{u\in C_k}z_u,\qquad
-c_k=\underset{z_u:\,u\in C_k}{\operatorname{argmin}}\;d_w(z_u,\bar c_k).
-\tag{7, implementation}
-$$
+Squared distances are used in the implementation when only the nearest center is required; this does not change the assignments. For a cluster `C[k]`, first compute its mean and then project to the nearest **observed member** when projected centers are enabled:
+
+![Eq. (7) — centroid selection convention](assets/equations/eq07-centroid.svg)
+
+*Eq. (7) — centroid selection convention.*
 
 The paper describes using the closest actual point to the cluster mean. This reproduction uses seeded farthest-first initialization and deterministic tie-breaking; the precise original initialization rule is not available. The paper also introduces a silhouette-style score,
 
-$$
-s(i)=\frac{b(i)-a(i)}{\max\{a(i),b(i)\}}.
-\tag{8}
-$$
+![Eq. (8) — silhouette coefficient](assets/equations/eq08-silhouette.svg)
+
+*Eq. (8) — silhouette coefficient.*
 
 **Important:** `kurcf sweep-k` uses the *standard sample-based silhouette* in variance-scaled space; the paper's prose describes distances to cluster centers. The two should not be presented as identical computations.
 
 ### 2.4 Co-rating similarity — Eqs. (9)–(10)
 
-Let $I_u$ and $I_v$ be the sets of items rated by users $u$ and $v$, and let $I_{uv}=I_u\cap I_v$. The overlap term is
+Let `I[u]` and `I[v]` be the sets of items rated by users u and v, and let `I[uv] = I[u] ∩ I[v]`. The overlap term is
 
-$$
-J(u,v)=\frac{|I_u\cap I_v|}{|I_u\cup I_v|}.
-\tag{9}
-$$
+![Eq. (9) — Jaccard similarity](assets/equations/eq09-jaccard.svg)
 
-Pearson correlation $P(u,v)$ is computed on their **co-rated** items:
+*Eq. (9) — Jaccard similarity.*
 
-$$
-P(u,v)=
-\frac{\sum_{i\in I_{uv}}(r_{ui}-\bar r_{u,I_{uv}})(r_{vi}-\bar r_{v,I_{uv}})}
-{\sqrt{\sum_{i\in I_{uv}}(r_{ui}-\bar r_{u,I_{uv}})^2}
- \sqrt{\sum_{i\in I_{uv}}(r_{vi}-\bar r_{v,I_{uv}})^2}}.
-$$
+Pearson correlation `P(u,v)` is computed on their **co-rated** items:
+
+![Pearson correlation over co-rated items](assets/equations/eq-pearson.svg)
+
+*Pearson correlation over co-rated items.*
 
 The mixed similarity is
 
-$$
-S(u,v)=\alpha P(u,v)+(1-\alpha)J(u,v),
-\qquad \alpha=0.3.
-\tag{10}
-$$
+![Eq. (10) — hybrid similarity](assets/equations/eq10-mixture.svg)
+
+*Eq. (10) — hybrid similarity.*
 
 If there are fewer than two co-rated items or either co-rated rating vector has zero variance, Pearson is set to zero. Candidate neighbors are restricted to the **same K-means cluster**; only positive mixed similarities are retained. Note that **Eq. (10) contains no explicit cluster-distance term**: clustering restricts the candidate set, rather than entering this formula as another summand.
 
 ### 2.5 Neighbor selection and rating prediction — implementation convention
 
-The top $N$ most similar eligible users are chosen within the target user's cluster ($N=20$ in the reported smoke runs). For target item $i$, only selected neighbors who rated $i$ contribute to the prediction:
+The top N most similar eligible users are chosen within the target user's cluster (`N = 20` in the reported smoke runs). For target item i, only selected neighbors who rated i contribute to the prediction:
 
-$$
-\widehat r_{ui}=
-\operatorname{clip}\left(
-\bar r_u+
-\frac{\sum_{v\in\mathcal N_N(u):\,i\in I_v}S(u,v)(r_{vi}-\bar r_v)}
-{\sum_{v\in\mathcal N_N(u):\,i\in I_v}|S(u,v)|},
-r_{\min},r_{\max}\right).
-\tag{implementation}
-$$
+![Implementation convention — mean-centered rating prediction](assets/equations/eq-prediction.svg)
+
+*Implementation convention — mean-centered rating prediction.*
 
 The user and neighbor means in this equation are computed from **training interactions**. When the denominator is zero, prediction falls back to the training-set item mean, or the global training mean for an unseen item. These choices make the implementation executable, but **the paper does not specify this exact prediction equation or fallback policy**.
 
@@ -159,19 +136,17 @@ Data: [GroupLens MovieLens](https://grouplens.org/datasets/movielens/). The proj
 
 The three implemented comparisons are **KUR-CF** (clustered, mixed similarity), **UserCF** (unclustered Pearson), and **Cluster-Pearson** (same clustering, Pearson-only ablation). These are **local, controlled baselines**; ItemCF and SVD from broader paper comparisons are not yet implemented.
 
-The reported metrics are computed as follows, with $q$ held-out rating cases and $U$ evaluated users:
+The reported metrics are computed as follows, with q held-out rating cases and U evaluated users:
 
-$$
-\operatorname{MAE}=\frac{1}{q}\sum_{(u,i)}|r_{ui}-\widehat r_{ui}|,\qquad
-\operatorname{RMSE}=\sqrt{\frac{1}{q}\sum_{(u,i)}(r_{ui}-\widehat r_{ui})^2}.
-$$
+![Eqs. (11)–(12) — MAE and RMSE](assets/equations/eq-rating-metrics.svg)
 
-$$
-\operatorname{Precision@K}=\frac{\sum_{u\in U}|R_K(u)\cap T(u)|}{\sum_{u\in U}|R_K(u)|},\qquad
-\operatorname{Recall@K}=\frac{\sum_{u\in U}|R_K(u)\cap T(u)|}{\sum_{u\in U}|T(u)|}.
-$$
+*Eqs. (11)–(12) — MAE and RMSE.*
 
-Here $R_K(u)$ is the top-K recommendation list and $T(u)$ consists of **held-out items rated at least 4**. Ranking metrics are micro-averaged over users having at least one relevant held-out item. Lower MAE/RMSE is better; higher Precision/Recall is better.
+![Eqs. (13)–(14) — Precision@K and Recall@K](assets/equations/eq-ranking-metrics.svg)
+
+*Eqs. (13)–(14) — Precision@K and Recall@K.*
+
+Here `R_K(u)` is the top-K recommendation list and `T(u)` consists of **held-out items rated at least 4**. Ranking metrics are micro-averaged over users having at least one relevant held-out item. Lower MAE/RMSE is better; higher Precision/Recall is better.
 
 ## 4. Observed reproduction results
 
@@ -244,14 +219,16 @@ kurcf sweep-k --dataset ml-100k --min-k 4 --max-k 12 \
   --output results/silhouette.json
 ~~~
 
-To regenerate **all three README SVG figures** from the *committed benchmark JSON* (requires Node.js 18+; no npm packages):
+To regenerate **three benchmark SVGs** and **twelve math SVGs** from the checked-in JSON/LaTeX sources (requires Node.js 18+):
 
 ~~~bash
 node scripts/render_figures.mjs
-git diff --exit-code -- assets/figures/
+npm install --no-save --no-package-lock mathjax-full@3.2.2
+node scripts/render_equations.cjs
+git diff --exit-code -- assets/figures/ assets/equations/*.svg
 ~~~
 
-The CI pipeline checks figure reproducibility as well as Python tests before publishing a versioned GitHub Release. The checked-in figures visualize **the original recorded runs**; regenerating them does not silently replace benchmark measurements.
+The CI pipeline checks both benchmark-figure and equation-SVG reproducibility, as well as Python tests, before publishing a versioned GitHub Release. The checked-in figures visualize **the original recorded runs**; regenerating them does not silently replace benchmark measurements.
 
 ## 6. Project structure
 
@@ -268,7 +245,9 @@ KURCF-Repro/
 │   ├── ml1m-smoke.json        # verified 1M result
 │   └── README.md              # experimental interpretation
 ├── assets/figures/            # vector pipeline + result charts
-├── scripts/render_figures.mjs # deterministic SVG generation
+├── assets/equations/          # 12 equation SVGs + editable LaTeX JSON
+├── scripts/render_figures.mjs # deterministic benchmark SVG generation
+├── scripts/render_equations.cjs # MathJax equation SVG renderer
 ├── docs/reproduction-notes.md
 ├── README.zh-CN.md
 └── .github/workflows/         # tests, releases, real-data smoke runs

@@ -22,74 +22,65 @@ KUR-CF 将**用户属性评分、方差加权聚类、共同评分混合相似�
 
 ## 2. 核心数学公式
 
+**移动端公式兼容说明：**本节公式已转换为 SVG 矢量图片，原始 LaTeX 保存在 [formulas.json](assets/equations/formulas.json)，通过 [MathJax 生成脚本](scripts/render_equations.cjs) 自动渲染。这样可以避免部分 GitHub 移动客户端直接显示 LaTeX 源码。
+
 ### 2.1 用户属性评分矩阵（论文公式 3）
 
-设用户数为 $m$、电影数为 $p$、属性维数为 $d$。训练集评分矩阵 $X\in\mathbb R^{m\times p}$，电影属性矩阵 $Y\in\{0,1\}^{p\times d}$，则
+设用户数为 m、电影数为 p、属性维数为 d。训练集评分矩阵 `X`（m × p），电影属性矩阵 `Y`（p × d，二值矩阵），则
 
-$$
-Z=XY,\qquad Z_{uj}=\sum_{i=1}^{p}X_{ui}Y_{ij}.
-\tag{3}
-$$
+![公式 (3)：用户属性评分矩阵](assets/equations/eq03-user-attribute.svg)
 
-这里的 $Z_{uj}$ 是用户 $u$ 对第 $j$ 类属性的**评分总和**，而非均值；缺失评分按零处理。用户历史评分数量不同，可能影响属性向量的尺度。代码位于 `src/kurcf/core.py` 的 `KURCF.fit`。
+*公式 (3)：用户属性评分矩阵.*
+
+这里的 `Z[u,j]` 是用户 u 对第 j 类属性的**评分总和**，而非均值；缺失评分按零处理。用户历史评分数量不同，可能影响属性向量的尺度。代码位于 `src/kurcf/core.py` 的 `KURCF.fit`。
 
 ### 2.2 属性方差及归一化权重（公式 4–5）
 
-$$
-\bar Z_j=\frac1m\sum_{u=1}^{m}Z_{uj},\qquad
-\sigma_j^2=\frac1m\sum_{u=1}^{m}(Z_{uj}-\bar Z_j)^2.
-\tag{4}
-$$
+![公式 (4)：属性方差](assets/equations/eq04-variance.svg)
 
-$$
-w_j=\frac{\sigma_j^2}{\sum_{\ell=1}^{d}\sigma_\ell^2},\qquad
-\sum_{j=1}^{d}w_j=1.
-\tag{5}
-$$
+*公式 (4)：属性方差.*
 
-属性方差越大，其聚类距离权重越高。所有属性方差均为零时，程序使用均匀权重 $1/d$ 作为数值保护措施，这属于**实现约定**。
+![公式 (5)：方差归一化权重](assets/equations/eq05-weights.svg)
+
+*公式 (5)：方差归一化权重.*
+
+属性方差越大，其聚类距离权重越高。所有属性方差均为零时，程序使用均匀权重 `1/d` 作为数值保护措施，这属于**实现约定**。
 
 ### 2.3 方差加权 K-means（公式 6–8）
 
-$$
-d_w(z_u,c_k)=\sqrt{\sum_{j=1}^{d}w_j(Z_{uj}-c_{kj})^2}.
-\tag{6}
-$$
+![公式 (6)：加权欧氏距离](assets/equations/eq06-distance.svg)
+
+*公式 (6)：加权欧氏距离.*
 
 聚类成员均值与实际样本中心的选择方式为
 
-$$
-\bar c_k=\frac1{|C_k|}\sum_{u\in C_k}z_u,\qquad
-c_k=\underset{z_u:\,u\in C_k}{\operatorname{argmin}}\,d_w(z_u,\bar c_k).
-\tag{7, 实现}
-$$
+![公式 (7)：聚类中心选择约定](assets/equations/eq07-centroid.svg)
+
+*公式 (7)：聚类中心选择约定.*
 
 程序默认将均值中心投影至最近的真实样本，采用固定随机种子与最远优先初始化；**论文未完整规定初始化细节**。程序计算聚类分配时使用加权距离的平方，与原距离在最近中心判断上等价。
 
 论文还给出轮廓系数形式：
 
-$$
-s(i)=\frac{b(i)-a(i)}{\max(a(i),b(i))}.
-\tag{8}
-$$
+![公式 (8)：轮廓系数](assets/equations/eq08-silhouette.svg)
+
+*公式 (8)：轮廓系数.*
 
 需要注意：`kurcf sweep-k` 使用的是方差缩放空间中的**标准样本轮廓系数**；论文文字涉及样本到聚类中心的距离，不能视为完全相同的实现。
 
 ### 2.4 Pearson–Jaccard 混合相似度（公式 9–10）
 
-$I_u$ 和 $I_v$ 分别表示两个用户的已评分电影集合，$I_{uv}=I_u\cap I_v$：
+`I[u]` 和 `I[v]` 分别表示两个用户的已评分电影集合，`I[uv] = I[u] ∩ I[v]`：
 
-$$
-J(u,v)=\frac{|I_u\cap I_v|}{|I_u\cup I_v|}.
-\tag{9}
-$$
+![公式 (9)：Jaccard 相似度](assets/equations/eq09-jaccard.svg)
 
-在共同评分电影上计算 Pearson 相关系数 $P(u,v)$，再进行加权组合：
+*公式 (9)：Jaccard 相似度.*
 
-$$
-S(u,v)=\alpha P(u,v)+(1-\alpha)J(u,v),\qquad\alpha=0.3.
-\tag{10}
-$$
+在共同评分电影上计算 Pearson 相关系数 `P(u,v)`，再进行加权组合：
+
+![公式 (10)：混合相似度](assets/equations/eq10-mixture.svg)
+
+*公式 (10)：混合相似度.*
 
 Pearson 具体采用共同评分项目上的中心化协方差除以标准差乘积；共同评分不足两项或方差为零时，返回零。只保留**同簇且相似度为正**的邻居。
 
@@ -99,17 +90,11 @@ Pearson 具体采用共同评分项目上的中心化协方差除以标准差乘
 
 论文描述了“从相似用户的已评分电影预测目标用户评分”的过程，但没有给出完整预测方程。本项目采用均值中心化的用户协同过滤：
 
-$$
-\widehat r_{ui}=
-\operatorname{clip}\left(
-\bar r_u+
-\frac{\sum_{v\in\mathcal N_N(u):\,i\in I_v}S(u,v)(r_{vi}-\bar r_v)}
-{\sum_{v\in\mathcal N_N(u):\,i\in I_v}|S(u,v)|},
-r_{\min},r_{\max}\right).
-\tag{本项目约定}
-$$
+![本项目实现约定：均值中心化评分预测](assets/equations/eq-prediction.svg)
 
-其中 $\mathcal N_N(u)$ 是用户 $u$ 所属簇中相似度最高的 $N$ 个正相似邻居（实验中 $N=20$）。若邻居没有给目标电影评分，则回退到训练集电影平均分；没有该电影历史评分时回退到训练集全局平均分。所有统计量均从**训练集**计算，测试集评分不会进入模型拟合。
+*本项目实现约定：均值中心化评分预测.*
+
+其中 `N_N(u)` 是用户 u 所属簇中相似度最高的 N 个正相似邻居（实验中 `N = 20`）。若邻居没有给目标电影评分，则回退到训练集电影平均分；没有该电影历史评分时回退到训练集全局平均分。所有统计量均从**训练集**计算，测试集评分不会进入模型拟合。
 
 ## 3. 真实数据实验设置
 
@@ -131,17 +116,15 @@ $$
 
 评价指标为
 
-$$
-\mathrm{MAE}=\frac1q\sum_{(u,i)}|r_{ui}-\widehat r_{ui}|,\qquad
-\mathrm{RMSE}=\sqrt{\frac1q\sum_{(u,i)}(r_{ui}-\widehat r_{ui})^2}.
-$$
+![公式 (11)–(12)：MAE 与 RMSE](assets/equations/eq-rating-metrics.svg)
 
-$$
-\mathrm{Precision@K}=\frac{\sum_u|R_K(u)\cap T(u)|}{\sum_u|R_K(u)|},\qquad
-\mathrm{Recall@K}=\frac{\sum_u|R_K(u)\cap T(u)|}{\sum_u|T(u)|}.
-$$
+*公式 (11)–(12)：MAE 与 RMSE.*
 
-其中 $R_K(u)$ 是推荐列表，$T(u)$ 为测试集中**评分不低于 4 分**的电影集合，指标采用微平均。MAE/RMSE 越低越好，Precision/Recall 越高越好。
+![公式 (13)–(14)：Precision@K 与 Recall@K](assets/equations/eq-ranking-metrics.svg)
+
+*公式 (13)–(14)：Precision@K 与 Recall@K.*
+
+其中 `R_K(u)` 是推荐列表，`T(u)` 为测试集中**评分不低于 4 分**的电影集合，指标采用微平均。MAE/RMSE 越低越好，Precision/Recall 越高越好。
 
 ## 4. 算法实际运行结果
 
@@ -209,14 +192,16 @@ kurcf sweep-k --dataset ml-100k --min-k 4 --max-k 12 \
   --output results/silhouette.json
 ~~~
 
-重新生成 README 中的 **3 张 SVG 图片**（Node.js 18+，无需 npm 依赖）：
+重新生成 README 中的 **3 张实验 SVG 图表**与 **12 张数学公式 SVG**（Node.js 18+）：
 
 ~~~bash
 node scripts/render_figures.mjs
-git diff --exit-code -- assets/figures/
+npm install --no-save --no-package-lock mathjax-full@3.2.2
+node scripts/render_equations.cjs
+git diff --exit-code -- assets/figures/ assets/equations/*.svg
 ~~~
 
-图表生成脚本读取的是仓库 `benchmarks/*.json` 中已存档的实验数据，保证图表与记录一致。新实验的输出默认保存在 `results/`，不会自动篡改原始记录。
+实验图表生成脚本读取仓库 `benchmarks/*.json` 中的实验数据；公式渲染脚本读取 `assets/equations/formulas.json` 中的 LaTeX 源码。两类 SVG 均由 CI 校验一致性。新实验的输出默认保存在 `results/`，不会自动篡改原始记录。
 
 ## 6. 文件说明与复现边界
 
@@ -229,7 +214,10 @@ git diff --exit-code -- assets/figures/
 | `tests/test_kurcf.py` | 公式、数据和端到端测试 |
 | `benchmarks/*.json` | 100K/1M 实际实验结果 |
 | `assets/figures/*.svg` | 算法流程与结果可视化 |
-| `scripts/render_figures.mjs` | 根据 JSON 重绘 SVG |
+| `assets/equations/*.svg` | 移动端兼容的数学公式矢量图 |
+| `assets/equations/formulas.json` | 可编辑的 LaTeX 公式源文件 |
+| `scripts/render_figures.mjs` | 根据实验 JSON 重绘 SVG |
+| `scripts/render_equations.cjs` | 使用 MathJax 渲染公式 SVG |
 | `docs/reproduction-notes.md` | 论文与代码差异、已知局限 |
 
 目前未实现原论文全部对照算法（如 ItemCF、SVD），也没有作者的原始划分与完整预测规则。请勿将独立复现的实验指标误称为论文官方结果。

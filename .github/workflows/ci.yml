@@ -39,8 +39,12 @@ jobs:
           node-version: "20"
       - name: Regenerate figures from benchmark JSON
         run: node scripts/render_figures.mjs
-      - name: Ensure committed figures match JSON
-        run: git diff --exit-code -- assets/figures/
+      - name: Install pinned MathJax renderer
+        run: npm install --no-save --no-package-lock mathjax-full@3.2.2
+      - name: Regenerate math SVGs from LaTeX
+        run: node scripts/render_equations.cjs
+      - name: Ensure committed figures match source JSON and LaTeX
+        run: git diff --exit-code -- assets/figures/ assets/equations/*.svg
 
   release:
     name: Build and release

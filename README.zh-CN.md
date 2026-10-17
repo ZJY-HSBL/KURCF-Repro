@@ -76,7 +76,13 @@ KUR-CF 将**用户属性评分、方差加权聚类、共同评分混合相似�
 
 *公式 (9)：Jaccard 相似度.*
 
-在共同评分电影上计算 Pearson 相关系数 `P(u,v)`，再进行加权组合：
+首先在两个用户共同评分的电影上计算 Pearson 相关系数：
+
+![共同评分电影上的 Pearson 相关系数](assets/equations/eq-pearson.svg)
+
+*Pearson 相关系数（基于共同评分项目）。*
+
+再将 Pearson 与 Jaccard 按权重进行组合：
 
 ![公式 (10)：混合相似度](assets/equations/eq10-mixture.svg)
 

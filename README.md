@@ -37,7 +37,7 @@ This project studies **KUR-CF**, a user-based collaborative filtering method tha
 
 ## 2. Mathematical formulation
 
-**Mobile-friendly equations.** All mathematical expressions below are stored as SVG images, rendered from [editable LaTeX source](assets/equations/formulas.json) using [MathJax](scripts/render_equations.cjs). This avoids the raw LaTeX display issue in some versions of the GitHub mobile app.
+**Mobile-friendly equations.** All mathematical expressions below are stored as SVG images, rendered from [editable LaTeX source](assets/equations/formulas.json) using [MathJax](scripts/render_equations.cjs). This avoids raw LaTeX in some GitHub mobile clients. Formula SVGs are XML-validated in CI, including nested radical graphics (the Eq. 6 fix in v0.1.4).
 
 ### 2.1 User–attribute rating matrix — Eq. (3)
 

@@ -22,7 +22,7 @@ KUR-CF 将**用户属性评分、方差加权聚类、共同评分混合相似�
 
 ## 2. 核心数学公式
 
-**移动端公式兼容说明：**本节公式已转换为 SVG 矢量图片，原始 LaTeX 保存在 [formulas.json](assets/equations/formulas.json)，通过 [MathJax 生成脚本](scripts/render_equations.cjs) 自动渲染。这样可以避免部分 GitHub 移动客户端直接显示 LaTeX 源码。
+**移动端公式兼容说明：**本节公式已转换为 SVG 矢量图片，原始 LaTeX 保存在 [formulas.json](assets/equations/formulas.json)，通过 [MathJax 生成脚本](scripts/render_equations.cjs) 自动渲染。这样可以避免部分 GitHub 移动客户端直接显示 LaTeX 源码。v0.1.4 同时修正了根式公式（尤其是公式 6）嵌套 SVG 被截断的问题，CI 会检查每张图片的 XML 完整性。
 
 ### 2.1 用户属性评分矩阵（论文公式 3）
 

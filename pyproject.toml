@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "kurcf-repro"
-version = "0.1.3"
+version = "0.1.4"
 description = "Independent reproduction of KUR-CF (Scientific Reports, 2025)"
 readme = "README.md"
 requires-python = ">=3.10"

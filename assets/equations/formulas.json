@@ -1,0 +1,65 @@
+{
+  "note": "Canonical editable LaTeX source for mobile-compatible README equation SVGs. Render with node scripts/render_equations.cjs",
+  "formulas": [
+    {
+      "name": "eq03-user-attribute",
+      "label": "Equation 3 — user-attribute rating matrix",
+      "latex": "\\begin{aligned} Z &= XY,\\qquad Z\\in\\mathbb{R}^{m\\times d}\\\\ Z_{uj} &= \\sum_{i=1}^{p}X_{ui}Y_{ij}\\end{aligned}"
+    },
+    {
+      "name": "eq04-variance",
+      "label": "Equation 4 — attribute variance",
+      "latex": "\\begin{aligned} \\mu_j &= \\frac{1}{m}\\sum_{u=1}^{m}Z_{uj}\\\\ \\sigma_j^2 &= \\frac{1}{m}\\sum_{u=1}^{m}(Z_{uj}-\\mu_j)^2\\end{aligned}"
+    },
+    {
+      "name": "eq05-weights",
+      "label": "Equation 5 — normalized variance weights",
+      "latex": "\\begin{aligned} w_j &= \\frac{\\sigma_j^2}{\\sum_{\\ell=1}^{d}\\sigma_\\ell^2},\\qquad w_j\\geq 0\\\\ \\sum_{j=1}^{d}w_j &= 1\\end{aligned}"
+    },
+    {
+      "name": "eq06-distance",
+      "label": "Equation 6 — variance-weighted Euclidean distance",
+      "latex": "d_w(z_u,c_k)=\\sqrt{\\sum_{j=1}^{d}w_j(Z_{uj}-c_{kj})^2}"
+    },
+    {
+      "name": "eq07-centroid",
+      "label": "Equation 7 — centroid projection implementation",
+      "latex": "\\begin{aligned}\\bar c_k &= \\frac{1}{|C_k|}\\sum_{u\\in C_k}z_u\\\\ c_k &= \\underset{z_u:\\,u\\in C_k}{\\operatorname{argmin}}\\;d_w(z_u,\\bar c_k)\\end{aligned}"
+    },
+    {
+      "name": "eq08-silhouette",
+      "label": "Equation 8 — silhouette coefficient",
+      "latex": "s(i)=\\frac{b(i)-a(i)}{\\max\\{a(i),b(i)\\}}"
+    },
+    {
+      "name": "eq09-jaccard",
+      "label": "Equation 9 — Jaccard similarity",
+      "latex": "J(u,v)=\\frac{|I_u\\cap I_v|}{|I_u\\cup I_v|}"
+    },
+    {
+      "name": "eq-pearson",
+      "label": "Pearson correlation on co-rated items",
+      "latex": "\\begin{aligned}\\delta_{ui}&=r_{ui}-\\bar r_{u,I_{uv}},\\quad \\delta_{vi}=r_{vi}-\\bar r_{v,I_{uv}}\\\\[6pt] P(u,v)&=\\frac{\\sum_{i\\in I_{uv}}\\delta_{ui}\\delta_{vi}}{\\sqrt{\\sum_{i\\in I_{uv}}\\delta_{ui}^{2}}\\sqrt{\\sum_{i\\in I_{uv}}\\delta_{vi}^{2}}}\\end{aligned}"
+    },
+    {
+      "name": "eq10-mixture",
+      "label": "Equation 10 — Pearson-Jaccard hybrid similarity",
+      "latex": "S(u,v)=\\alpha P(u,v)+(1-\\alpha)J(u,v),\\qquad \\alpha=0.3"
+    },
+    {
+      "name": "eq-prediction",
+      "label": "Implementation convention — mean-centered neighborhood prediction",
+      "latex": "\\begin{aligned}\\widehat r_{ui}&=\\operatorname{clip}\\!\\left(\\bar r_u+\\frac{A_{ui}}{B_{ui}},\\,r_{\\min},\\,r_{\\max}\\right)\\\\[6pt] A_{ui}&=\\sum_{\\substack{v\\in\\mathcal N_N(u)\\\\i\\in I_v}}S(u,v)(r_{vi}-\\bar r_v)\\\\ B_{ui}&=\\sum_{\\substack{v\\in\\mathcal N_N(u)\\\\i\\in I_v}}|S(u,v)|\\end{aligned}"
+    },
+    {
+      "name": "eq-rating-metrics",
+      "label": "MAE and RMSE rating prediction metrics",
+      "latex": "\\begin{aligned}\\operatorname{MAE}&=\\frac{1}{q}\\sum_{(u,i)}|r_{ui}-\\widehat r_{ui}|\\\\[6pt]\\operatorname{RMSE}&=\\sqrt{\\frac{1}{q}\\sum_{(u,i)}(r_{ui}-\\widehat r_{ui})^2}\\end{aligned}"
+    },
+    {
+      "name": "eq-ranking-metrics",
+      "label": "Micro-averaged Precision at K and Recall at K",
+      "latex": "\\begin{aligned}\\operatorname{Precision@K}&=\\frac{\\sum_{u\\in U}|R_K(u)\\cap T(u)|}{\\sum_{u\\in U}|R_K(u)|}\\\\[6pt]\\operatorname{Recall@K}&=\\frac{\\sum_{u\\in U}|R_K(u)\\cap T(u)|}{\\sum_{u\\in U}|T(u)|}\\end{aligned}"
+    }
+  ]
+}

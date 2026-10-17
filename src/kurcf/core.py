@@ -44,6 +44,7 @@ def weighted_kmeans(
     seed: int = 42,
     max_iter: int = 100,
     projected_centers: bool = True,
+    feature_weighting: str = "variance",
 ) -> ClusterResult:
     """Variance-weighted K-means with deterministic farthest-first initialization.
 
@@ -52,7 +53,9 @@ def weighted_kmeans(
     engineering choice because the paper does not specify a selection rule.
     """
     x = np.asarray(features, dtype=np.float64)
-    weights = variance_weights(x)
+    if feature_weighting not in ("variance", "uniform"):
+        raise ValueError("feature_weighting must be variance or uniform")
+    weights = variance_weights(x) if feature_weighting == "variance" else np.full(x.shape[1], 1.0 / x.shape[1])
     n, _ = x.shape
     if not isinstance(n_clusters, int) or not 1 <= n_clusters <= n:
         raise ValueError("n_clusters must be between 1 and number of samples")
@@ -141,6 +144,7 @@ class KURCF:
         self, n_clusters: int = 7, n_neighbors: int = 20, alpha: float = 0.3,
         seed: int = 42, *, clustered: bool = True,
         similarity: str = "combined", projected_centers: bool = True,
+        feature_weighting: str = "variance",
     ) -> None:
         if n_neighbors < 1 or n_clusters < 1:
             raise ValueError("n_neighbors and n_clusters must be positive")
@@ -148,6 +152,8 @@ class KURCF:
             raise ValueError("alpha must be in [0,1]")
         if similarity not in ("combined", "pearson", "jaccard"):
             raise ValueError("unknown similarity type")
+        if feature_weighting not in ("variance", "uniform"):
+            raise ValueError("feature_weighting must be variance or uniform")
         self.n_clusters = n_clusters
         self.n_neighbors = n_neighbors
         self.alpha = alpha
@@ -155,6 +161,7 @@ class KURCF:
         self.clustered = clustered
         self.similarity = similarity
         self.projected_centers = projected_centers
+        self.feature_weighting = feature_weighting
         self._fitted = False
 
     def fit(
@@ -203,7 +210,8 @@ class KURCF:
             self.user_profiles = profiles
             self.clusters = weighted_kmeans(
                 profiles, min(self.n_clusters, len(self.user_ids)),
-                seed=self.seed, projected_centers=self.projected_centers
+                seed=self.seed, projected_centers=self.projected_centers,
+                feature_weighting=self.feature_weighting,
             )
             self.group = {u: int(label) for u, label in zip(self.user_ids, self.clusters.labels)}
             self.group_members: dict[int, list[int]] = {}

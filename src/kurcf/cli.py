@@ -9,6 +9,7 @@ import time
 from .core import KURCF, weighted_kmeans
 from .data import download_movielens, load_movielens, user_stratified_split
 from .evaluation import rating_metrics, ranking_metrics
+from .study import run_study
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -38,6 +39,22 @@ def build_parser() -> argparse.ArgumentParser:
             arg.add_argument("--min-k", type=int, default=4)
             arg.add_argument("--max-k", type=int, default=12)
             arg.add_argument("--sample-size", type=int, default=1000)
+    study = subs.add_parser("study", help="full held-out rating evaluation with controlled ablations")
+    study.add_argument("--dataset", choices=["ml-100k", "ml-1m"], default="ml-100k")
+    study.add_argument("--data-dir", default="data")
+    study.add_argument("--seed", type=int, default=0)
+    study.add_argument("--clusters", type=int, default=7)
+    study.add_argument("--neighbors", type=int, default=20)
+    study.add_argument("--alpha", type=float, default=0.3)
+    study.add_argument("--test-ratio", type=float, default=0.2)
+    study.add_argument("--top-k", type=int, default=10)
+    study.add_argument("--rating-cases", type=int, default=0,
+                       help="0 evaluates ALL held-out rating cases")
+    study.add_argument("--ranking-users", type=int, default=100,
+                       help="0 evaluates ALL eligible users")
+    study.add_argument("--alpha-grid", type=float, nargs="+", default=[0, 0.3, 0.6, 1.0])
+    study.add_argument("--cluster-grid", type=int, nargs="+", default=[4, 7, 10])
+    study.add_argument("--output", type=Path)
     return p
 
 
@@ -106,7 +123,8 @@ def main(argv: list[str] | None = None) -> None:
     if args.command == "download":
         print(download_movielens(args.dataset, args.data_dir))
         return
-    result = benchmark(args) if args.command == "benchmark" else sweep_k(args)
+    result = (benchmark(args) if args.command == "benchmark" else
+              sweep_k(args) if args.command == "sweep-k" else run_study(args))
     body = json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False)
     print(body)
     if args.output:

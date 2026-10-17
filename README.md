@@ -256,24 +256,48 @@ KURCF-Repro/
 └── .github/workflows/         # tests, releases, real-data smoke runs
 ~~~
 
-## 7. Full-rating multi-seed ablation study (v0.2.0)
+## 7. Five-seed full-rating study and ablations (v0.2.1)
 
-The v0.2.0 study extends the original smoke checks into **five independent user-stratified MovieLens 100K splits (seeds 0–4)**. It evaluates **all 20,000 held-out ratings per seed** for MAE/RMSE, while explicitly limiting Top-10 ranking to **100 sampled eligible users per seed**. Every method within a seed sees the same training data and evaluation population.
+**Completed and archived:** MovieLens 100K, five independent user-stratified 80/20 splits (seeds 0–4). Every variant was evaluated on **all 20,000 held-out ratings per seed** (100,000 predictions across splits, not 100,000 distinct interactions). Top-10 recommendation metrics use **100 sampled eligible users per seed**, not the entire user population.
 
-The seven controlled variants are KUR-CF, UserCF, clustered Pearson, clustered Jaccard, unclustered hybrid similarity, uniform K-means weights, and non-projected mean centers. The alpha and cluster-count sweeps are **descriptive test-set sensitivity checks, not test-set tuning**. Five-seed means, standard deviations, paired differences and 95% exploratory bootstrap intervals are computed from recorded raw JSON.
+[Full report](benchmarks/study/README.md) · [Raw seed JSON](benchmarks/study/runs/) · [Means, SDs and 95% CIs](benchmarks/study/ml100k-summary.json) · [Successful GitHub Actions run](https://github.com/ZJY-HSBL/KURCF-Repro/actions/runs/39006215491) · [Study protocol](docs/study-protocol.md)
 
-[Study protocol](docs/study-protocol.md) · [Automated GitHub Actions study](.github/workflows/movielens-study.yml) · [Generated results (available after successful run)](benchmarks/study/README.md)
+![Five-seed MovieLens 100K controlled ablation results](assets/figures/ml100k-study-overview.svg)
 
-Run one full held-out rating evaluation locally:
+*Figure 4. Seven measured variants, with exploratory 95% bootstrap intervals over split seeds.*
+
+| Variant | MAE ↓ | RMSE ↓ | Precision@10 ↑ | Recall@10 ↑ |
+|:--|--:|--:|--:|--:|
+| **KUR-CF (α=0.3)** | 0.8139 | 1.0457 | 2.20% | 1.93% |
+| UserCF (Pearson) | 0.8633 | 1.0954 | 2.48% | 2.19% |
+| Cluster-Pearson | 0.8336 | 1.0683 | 2.36% | 2.05% |
+| **Cluster-Jaccard (α=0)** | **0.8095** | **1.0374** | 1.98% | 1.74% |
+| **Unclustered hybrid** | 0.8339 | 1.0693 | **3.24%** | **2.79%** |
+| Uniform feature weights | 0.8157 | 1.0473 | 2.14% | 1.88% |
+| Unprojected mean centers | 0.8131 | 1.0446 | 2.26% | 1.98% |
+
+**Interpretation.** KUR-CF improves mean MAE over unclustered Pearson UserCF by **0.0494** (paired baseline-minus-KUR-CF 95% bootstrap CI **[0.0456, 0.0535]**). However, pure **clustered Jaccard** has lower MAE and RMSE than KUR-CF at α=0.3. The **unclustered hybrid** has higher sampled Top-10 precision and recall. Removing variance weighting or projected centers changes MAE only slightly, with paired intervals spanning zero. **KUR-CF does not dominate all ablations.**
+
+![Alpha sensitivity across five real splits](assets/figures/ml100k-study-alpha.svg)
+
+*Figure 5. Alpha sensitivity: α=0 gives the lowest MAE among the tested values, whereas larger α generally increases sampled recall. The test-set sweep is descriptive, **not** unbiased hyperparameter tuning.*
+
+![Cluster-count sensitivity across five real splits](assets/figures/ml100k-study-clusters.svg)
+
+*Figure 6. K=4, 7, 10 sensitivity; this does not establish a universally optimal K.*
+
+These results are stronger evidence for the independent 100K rating protocol than the earlier smoke sample, but **do not verify the original paper's numerical claims**. The authors' partitions and complete prediction rules remain unavailable; the ranking evaluation is still user-sampled.
+
+Reproduce one seed and regenerate the committed report:
 
 ~~~bash
 kurcf download --dataset ml-100k
 kurcf study --dataset ml-100k --seed 0 --clusters 7 \
   --neighbors 20 --alpha 0.3 --rating-cases 0 \
   --ranking-users 100 --top-k 10 --output results/seed-0.json
-~~~
 
-**Provenance:** This study does not claim to reproduce the original paper's unavailable train/test partitions or exact prediction formula. MovieLens 1M remains at the smoke-evaluation stage.
+python scripts/summarize_study.py --min-seeds 5 --check
+~~~
 
 ## 8. Citation and provenance
 

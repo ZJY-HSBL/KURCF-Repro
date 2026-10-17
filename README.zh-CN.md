@@ -231,26 +231,48 @@ git diff --exit-code -- assets/figures/ assets/equations/*.svg
 
 目前未实现原论文全部对照算法（如 ItemCF、SVD），也没有作者的原始划分与完整预测规则。请勿将独立复现的实验指标误称为论文官方结果。
 
-## 7. 完整评分测试与多随机种子消融实验（v0.2.0）
+## 7. 五随机种子完整评分测试与消融实验（v0.2.1）
 
-在先前抽样验证的基础上，v0.2.0 新增 **MovieLens 100K 五组独立随机划分（种子 0–4）**。每组的 MAE、RMSE 使用**全部约 20,000 条测试评分**，而 Precision@10、Recall@10 仍然只使用**100 位抽样用户**，两者不能混为“全部完整测试”。
+**真实实验已完成，五组原始 JSON、统计结果和图片均已推送至 GitHub。** MovieLens 100K 采用种子 0–4 的五组独立 80/20 随机划分，每组对**全部 20,000 条测试评分**计算 MAE、RMSE。五组合计 100,000 次预测，但不同划分可能重复出现相同的用户—电影记录。Top-10 推荐指标每组只抽取 **100 位符合条件的用户**，不能称为全量推荐测试。
 
-实验包含七种受控方法：KUR-CF、传统 UserCF、聚类 Pearson、聚类 Jaccard、无聚类混合相似度、均匀属性权重，以及不投影至实际样本的均值中心。还将分析混合系数 α 与聚类数 K 的敏感性。不同方法使用同一随机种子下完全一致的训练集、测试集和评价对象。
+[完整实验报告](benchmarks/study/README.md) · [原始实验 JSON](benchmarks/study/runs/) · [均值、标准差及 95% 区间](benchmarks/study/ml100k-summary.json) · [GitHub Actions 成功记录](https://github.com/ZJY-HSBL/KURCF-Repro/actions/runs/39006215491) · [实验协议](docs/study-protocol.md)
 
-实验完成后，将由真实运行记录生成五种子的均值、标准差、探索性 95% Bootstrap 区间，以及三张新的 SVG 对比图。**α、K 的测试集曲线仅用于敏感性描述，不能据此调参后再声称测试结果无偏。**
+![五随机种子 MovieLens 100K 实验对比](assets/figures/ml100k-study-overview.svg)
 
-[详细实验协议](docs/study-protocol.md) · [GitHub Actions 实验流水线](.github/workflows/movielens-study.yml) · [运行成功后生成的实验结果](benchmarks/study/README.md)
+*图 4. 七种方法的真实测量结果，误差线表示基于随机划分的探索性 95% Bootstrap 区间。*
 
-单个随机种子的完整评分测试命令：
+| 模型 | MAE ↓ | RMSE ↓ | Precision@10 ↑ | Recall@10 ↑ |
+|:--|--:|--:|--:|--:|
+| **KUR-CF（α=0.3）** | 0.8139 | 1.0457 | 2.20% | 1.93% |
+| 传统 UserCF（Pearson） | 0.8633 | 1.0954 | 2.48% | 2.19% |
+| 聚类 + Pearson | 0.8336 | 1.0683 | 2.36% | 2.05% |
+| **聚类 + Jaccard（α=0）** | **0.8095** | **1.0374** | 1.98% | 1.74% |
+| **不聚类 + 混合相似度** | 0.8339 | 1.0693 | **3.24%** | **2.79%** |
+| 均匀属性权重 | 0.8157 | 1.0473 | 2.14% | 1.88% |
+| 不投影的均值中心 | 0.8131 | 1.0446 | 2.26% | 1.98% |
+
+**关键发现：**KUR-CF 相比传统 UserCF 的平均 MAE 降低 **0.0494**，配对 Bootstrap 95% 区间为 **[0.0456, 0.0535]**。但是，**纯 Jaccard 聚类模型的 MAE、RMSE 比 KUR-CF 更低**；**不聚类的混合相似度模型**反而取得最高的抽样 Precision@10、Recall@10。取消方差权重和取消中心投影造成的 MAE 变化较小，配对区间跨越零，暂时不能认定它们稳定有效。
+
+![α 混合系数敏感性实验](assets/figures/ml100k-study-alpha.svg)
+
+*图 5. 在测试的 α=0、0.3、0.6、1.0 中，α=0 的 MAE 最低，但提高 α 时抽样召回率有所上升。这只是测试集上的描述性分析，不能据此调参后再报告无偏测试性能。*
+
+![K 聚类数敏感性实验](assets/figures/ml100k-study-clusters.svg)
+
+*图 6. K=4、7、10 的敏感性比较，不能证明 K=7 在其他数据集上普遍最优。*
+
+这次结果比原来的 100K 小样本测试更可靠，但**仍不等于严格重复原论文的数值结论**：原作者的完整数据划分和预测规则尚不可得；五组划分来自同一数据集；推荐指标仍然只评估抽样用户。
+
+复现单个随机种子，或校验已提交的统计结果：
 
 ~~~bash
 kurcf download --dataset ml-100k
 kurcf study --dataset ml-100k --seed 0 --clusters 7 \
   --neighbors 20 --alpha 0.3 --rating-cases 0 \
   --ranking-users 100 --top-k 10 --output results/seed-0.json
-~~~
 
-注意：本项目仍然无法还原论文作者未公开的完整实验划分和评分预测细节；MovieLens 1M 暂时仍以抽样实验为主。
+python scripts/summarize_study.py --min-seeds 5 --check
+~~~
 
 ## 8. 引用与许可证
 

@@ -54,7 +54,7 @@ workflow artifact. After all five succeed, the aggregation job validates
 comparability, computes uncertainty intervals, and commits the raw results,
 the summary JSON and three vector figures.
 
-Generated outputs, once the first complete workflow succeeds:
+Generated outputs, committed after the successful five-seed run:
 
 - benchmarks/study/runs/seed-0.json through seed-4.json
 - benchmarks/study/ml100k-summary.json
@@ -63,9 +63,7 @@ Generated outputs, once the first complete workflow succeeds:
 - assets/figures/ml100k-study-alpha.svg
 - assets/figures/ml100k-study-clusters.svg
 
-These files **must not** be populated with invented metrics when the workflow
-is pending or fails. If GroupLens is unreachable or GitHub Actions timeouts
-occur, report the failure and retain raw logs rather than substituting data.
+The five-seed study completed in [GitHub Actions run 39006215491](https://github.com/ZJY-HSBL/KURCF-Repro/actions/runs/39006215491). Raw JSON, summary and figures are committed and independently regenerable. Future failures must not be replaced by invented measurements.
 
 ## Methodological limitations
 

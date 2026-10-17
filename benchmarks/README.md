@@ -1,6 +1,6 @@
 # Verified smoke runs on official MovieLens datasets
 
-**New in v0.2.0:** A separate five-seed full-rating study is available via [the documented protocol](../docs/study-protocol.md). The [study report](study/README.md) will appear only after the independent GitHub Actions jobs successfully finish. The figures and tables below remain the original **small-sample smoke runs**, not the new study results.
+**Completed in v0.2.1:** The [five-seed full-rating study](study/README.md) includes seven ablations, paired bootstrap intervals, original per-seed JSON and three SVG figures. See the [documented protocol](../docs/study-protocol.md). The figures and tables below remain the original **small-sample smoke runs**, retained for provenance.
 
 These runs were executed by GitHub Actions using the code in this repository.
 They are **not** a numerical replication of the original article's plots.

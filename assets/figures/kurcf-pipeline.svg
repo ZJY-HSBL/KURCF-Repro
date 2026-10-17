@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1320" height="650" viewBox="0 0 1320 650" role="img" aria-labelledby="title desc"><title id="title">KUR-CF algorithm pipeline</title><desc id="desc">Train-only ratings and genre features form user attribute profiles; variance-weighted K-means clusters users; same-cluster users are scored with Pearson and Jaccard; nearest neighbors produce recommendations.</desc>
+<rect width="1320" height="650" fill="#ffffff"/><defs><marker id="arr" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#7b8da4"/></marker></defs>
+<text x="54" y="59" font-family="Arial,sans-serif" font-weight="700" font-size="30" fill="#15263c">KUR-CF | Algorithm Pipeline</text><text x="55" y="90" font-family="Arial,sans-serif" font-size="16" fill="#64748b">From training interactions to cluster-restricted collaborative filtering</text>
+<rect x="55" y="140" width="235" height="105" rx="16" fill="#f3f8ff" stroke="#d5e2f3" stroke-width="1.5"/>
+<text x="75" y="168" font-family="Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="1" fill="#61758c">INPUT 01</text>
+<text x="75" y="200" font-family="Arial,sans-serif" font-size="19" font-weight="700" fill="#172b46">Ratings matrix X</text>
+<text x="75" y="225" font-family="Arial,sans-serif" font-size="13" fill="#64748b">Users × movies</text>
+<rect x="55" y="285" width="235" height="105" rx="16" fill="#f3f8ff" stroke="#d5e2f3" stroke-width="1.5"/>
+<text x="75" y="313" font-family="Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="1" fill="#61758c">INPUT 02</text>
+<text x="75" y="345" font-family="Arial,sans-serif" font-size="19" font-weight="700" fill="#172b46">Genre matrix Y</text>
+<text x="75" y="370" font-family="Arial,sans-serif" font-size="13" fill="#64748b">Movies × attributes</text>
+<rect x="365" y="215" width="245" height="116" rx="16" fill="#f0faf7" stroke="#b8d9d2" stroke-width="1.5"/>
+<text x="385" y="243" font-family="Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="1" fill="#61758c">PAPER · EQ. 3</text>
+<text x="385" y="275" font-family="Arial,sans-serif" font-size="19" font-weight="700" fill="#172b46">User profiles Z</text>
+<text x="385" y="300" font-family="Arial,sans-serif" font-size="13" fill="#64748b">Matrix product Z = X · Y</text>
+<rect x="687" y="215" width="245" height="116" rx="16" fill="#f0faf7" stroke="#b8d9d2" stroke-width="1.5"/>
+<text x="707" y="243" font-family="Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="1" fill="#61758c">PAPER · EQ. 4–5</text>
+<text x="707" y="275" font-family="Arial,sans-serif" font-size="19" font-weight="700" fill="#172b46">Variance weights</text>
+<text x="707" y="300" font-family="Arial,sans-serif" font-size="13" fill="#64748b">w = Var / total variance</text>
+<rect x="1010" y="215" width="255" height="116" rx="16" fill="#f0faf7" stroke="#b8d9d2" stroke-width="1.5"/>
+<text x="1030" y="243" font-family="Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="1" fill="#61758c">PAPER · EQ. 6–8</text>
+<text x="1030" y="275" font-family="Arial,sans-serif" font-size="19" font-weight="700" fill="#172b46">Weighted K-means</text>
+<text x="1030" y="300" font-family="Arial,sans-serif" font-size="13" fill="#64748b">k = 7 / 6 in smoke runs</text>
+<rect x="1010" y="431" width="255" height="117" rx="16" fill="#f3f8ff" stroke="#d5e2f3" stroke-width="1.5"/>
+<text x="1030" y="459" font-family="Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="1" fill="#61758c">CLUSTER FILTER</text>
+<text x="1030" y="491" font-family="Arial,sans-serif" font-size="19" font-weight="700" fill="#172b46">Same-cluster peers</text>
+<text x="1030" y="516" font-family="Arial,sans-serif" font-size="13" fill="#64748b">Restrict candidate users</text>
+<rect x="687" y="431" width="245" height="117" rx="16" fill="#f0faf7" stroke="#b8d9d2" stroke-width="1.5"/>
+<text x="707" y="459" font-family="Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="1" fill="#61758c">PAPER · EQ. 9–10</text>
+<text x="707" y="491" font-family="Arial,sans-serif" font-size="19" font-weight="700" fill="#172b46">Hybrid similarity</text>
+<text x="707" y="516" font-family="Arial,sans-serif" font-size="13" fill="#64748b">0.3 Pearson + 0.7 Jaccard</text>
+<rect x="365" y="431" width="245" height="117" rx="16" fill="#f3f8ff" stroke="#d5e2f3" stroke-width="1.5"/>
+<text x="385" y="459" font-family="Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="1" fill="#61758c">NEIGHBORHOOD</text>
+<text x="385" y="491" font-family="Arial,sans-serif" font-size="19" font-weight="700" fill="#172b46">Top-N similar users</text>
+<text x="385" y="516" font-family="Arial,sans-serif" font-size="13" fill="#64748b">N = 20, positive similarity</text>
+<rect x="55" y="431" width="235" height="117" rx="16" fill="#fff8ec" stroke="#f4d5aa" stroke-width="1.5"/>
+<text x="75" y="459" font-family="Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="1" fill="#61758c">REPRODUCTION CHOICE</text>
+<text x="75" y="491" font-family="Arial,sans-serif" font-size="19" font-weight="700" fill="#172b46">Rating prediction</text>
+<text x="75" y="516" font-family="Arial,sans-serif" font-size="13" fill="#64748b">Mean-centered + Top-K</text>
+<path d="M290 191 L322 191 L322 256 L360 256" fill="none" stroke="#8293a9" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arr)"/>
+<path d="M290 338 L322 338 L322 291 L360 291" fill="none" stroke="#8293a9" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arr)"/>
+<path d="M610 274 L682 274" fill="none" stroke="#8293a9" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arr)"/>
+<path d="M932 274 L1005 274" fill="none" stroke="#8293a9" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arr)"/>
+<path d="M1138 331 L1138 426" fill="none" stroke="#8293a9" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arr)"/>
+<path d="M1009 490 L938 490" fill="none" stroke="#8293a9" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arr)"/>
+<path d="M686 490 L615 490" fill="none" stroke="#8293a9" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arr)"/>
+<path d="M364 490 L296 490" fill="none" stroke="#8293a9" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arr)"/>
+<line x1="54" y1="590" x2="1265" y2="590" stroke="#e5eaf0"/><text x="55" y="617" font-family="Arial,sans-serif" font-size="14" fill="#64748b">Green: paper-described operations · Orange: explicit prediction convention · All user statistics fitted from TRAIN ratings only.</text>
+</svg>

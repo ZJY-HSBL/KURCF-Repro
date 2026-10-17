@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="865" viewBox="0 0 1280 865" role="img" aria-labelledby="title desc"><title id="title">MovieLens 100K benchmark results</title><desc id="desc">Four bar charts of measured MAE, RMSE, Precision at 10 and Recall at 10 for KUR-CF, UserCF and Cluster-Pearson, from independently sampled MovieLens test data.</desc>
+<rect width="1280" height="865" fill="#ffffff"/><text x="55" y="64" font-family="Arial,sans-serif" font-weight="700" font-size="32" fill="#16283f">MovieLens 100K | Reproduction Results</text>
+<text x="55" y="98" font-family="Arial,sans-serif" font-size="17" fill="#61758c">Train: 80,000 · Test: 20,000 · Seed: 42 · Clusters: 7 · Neighbors: 20</text>
+<text x="55" y="127" font-family="Arial,sans-serif" font-size="15" fill="#64748b">Rating cases: 120 · Ranking users: 12 · Top-K: 10 · Sampled smoke test, not the paper's original split</text>
+<rect x="55" y="150" width="18" height="18" rx="4" fill="#2463a7"/><text x="82" y="165" font-family="Arial,sans-serif" font-size="15" fill="#334155">KUR-CF</text>
+<rect x="255" y="150" width="18" height="18" rx="4" fill="#0f9c8a"/><text x="282" y="165" font-family="Arial,sans-serif" font-size="15" fill="#334155">UserCF</text>
+<rect x="455" y="150" width="18" height="18" rx="4" fill="#d68a29"/><text x="482" y="165" font-family="Arial,sans-serif" font-size="15" fill="#334155">Cluster-Pearson</text>
+<rect x="55" y="195" width="565" height="295" rx="18" fill="#f9fbfe" stroke="#dfe7f0" stroke-width="1.3"/>
+<text x="80" y="238" font-family="Arial,sans-serif" font-size="23" font-weight="700" fill="#1c334e">MAE</text>
+<text x="80" y="262" font-family="Arial,sans-serif" font-size="12" font-weight="700" letter-spacing=".6" fill="#71839a">LOWER IS BETTER</text>
+<text x="80" y="317" font-family="Arial,sans-serif" font-size="14" fill="#42546c">KUR-CF</text>
+<rect x="227" y="298" width="275" height="28" rx="6" fill="#e9eef5"/>
+<rect x="227" y="298" width="216.270" height="28" rx="6" fill="#2463a7"/>
+<text x="452.27" y="318" font-family="Arial,sans-serif" font-size="14" font-weight="700" fill="#23354c">0.8625</text>
+<text x="80" y="372" font-family="Arial,sans-serif" font-size="14" fill="#42546c">UserCF</text>
+<rect x="227" y="353" width="275" height="28" rx="6" fill="#e9eef5"/>
+<rect x="227" y="353" width="225.410" height="28" rx="6" fill="#0f9c8a"/>
+<text x="461.41" y="373" font-family="Arial,sans-serif" font-size="14" font-weight="700" fill="#23354c">0.8989</text>
+<text x="80" y="427" font-family="Arial,sans-serif" font-size="14" fill="#42546c">Cluster-Pearson</text>
+<rect x="227" y="408" width="275" height="28" rx="6" fill="#e9eef5"/>
+<rect x="227" y="408" width="225.277" height="28" rx="6" fill="#d68a29"/>
+<text x="461.28" y="428" font-family="Arial,sans-serif" font-size="14" font-weight="700" fill="#23354c">0.8984</text>
+<text x="227" y="476" font-family="Arial,sans-serif" font-size="12" fill="#8190a2">0</text>
+<rect x="660" y="195" width="565" height="295" rx="18" fill="#f9fbfe" stroke="#dfe7f0" stroke-width="1.3"/>
+<text x="685" y="238" font-family="Arial,sans-serif" font-size="23" font-weight="700" fill="#1c334e">RMSE</text>
+<text x="685" y="262" font-family="Arial,sans-serif" font-size="12" font-weight="700" letter-spacing=".6" fill="#71839a">LOWER IS BETTER</text>
+<text x="685" y="317" font-family="Arial,sans-serif" font-size="14" fill="#42546c">KUR-CF</text>
+<rect x="832" y="298" width="275" height="28" rx="6" fill="#e9eef5"/>
+<rect x="832" y="298" width="214.394" height="28" rx="6" fill="#2463a7"/>
+<text x="1055.39" y="318" font-family="Arial,sans-serif" font-size="14" font-weight="700" fill="#23354c">1.1047</text>
+<text x="685" y="372" font-family="Arial,sans-serif" font-size="14" fill="#42546c">UserCF</text>
+<rect x="832" y="353" width="275" height="28" rx="6" fill="#e9eef5"/>
+<rect x="832" y="353" width="224.625" height="28" rx="6" fill="#0f9c8a"/>
+<text x="1065.63" y="373" font-family="Arial,sans-serif" font-size="14" font-weight="700" fill="#23354c">1.1574</text>
+<text x="685" y="427" font-family="Arial,sans-serif" font-size="14" fill="#42546c">Cluster-Pearson</text>
+<rect x="832" y="408" width="275" height="28" rx="6" fill="#e9eef5"/>
+<rect x="832" y="408" width="225.410" height="28" rx="6" fill="#d68a29"/>
+<text x="1066.41" y="428" font-family="Arial,sans-serif" font-size="14" font-weight="700" fill="#23354c">1.1614</text>
+<text x="832" y="476" font-family="Arial,sans-serif" font-size="12" fill="#8190a2">0</text>
+<rect x="55" y="506" width="565" height="295" rx="18" fill="#f9fbfe" stroke="#dfe7f0" stroke-width="1.3"/>
+<text x="80" y="549" font-family="Arial,sans-serif" font-size="23" font-weight="700" fill="#1c334e">Precision@10</text>
+<text x="80" y="573" font-family="Arial,sans-serif" font-size="12" font-weight="700" letter-spacing=".6" fill="#71839a">HIGHER IS BETTER</text>
+<text x="80" y="628" font-family="Arial,sans-serif" font-size="14" fill="#42546c">KUR-CF</text>
+<rect x="227" y="609" width="275" height="28" rx="6" fill="#e9eef5"/>
+<rect x="227" y="609" width="75.137" height="28" rx="6" fill="#2463a7"/>
+<text x="311.14" y="629" font-family="Arial,sans-serif" font-size="14" font-weight="700" fill="#23354c">0.83%</text>
+<text x="80" y="683" font-family="Arial,sans-serif" font-size="14" fill="#42546c">UserCF</text>
+<rect x="227" y="664" width="275" height="28" rx="6" fill="#e9eef5"/>
+<rect x="227" y="664" width="75.137" height="28" rx="6" fill="#0f9c8a"/>
+<text x="311.14" y="684" font-family="Arial,sans-serif" font-size="14" font-weight="700" fill="#23354c">0.83%</text>
+<text x="80" y="738" font-family="Arial,sans-serif" font-size="14" fill="#42546c">Cluster-Pearson</text>
+<rect x="227" y="719" width="275" height="28" rx="6" fill="#e9eef5"/>
+<rect x="227" y="719" width="225.410" height="28" rx="6" fill="#d68a29"/>
+<text x="461.41" y="739" font-family="Arial,sans-serif" font-size="14" font-weight="700" fill="#23354c">2.50%</text>
+<text x="227" y="787" font-family="Arial,sans-serif" font-size="12" fill="#8190a2">0</text>
+<rect x="660" y="506" width="565" height="295" rx="18" fill="#f9fbfe" stroke="#dfe7f0" stroke-width="1.3"/>
+<text x="685" y="549" font-family="Arial,sans-serif" font-size="23" font-weight="700" fill="#1c334e">Recall@10</text>
+<text x="685" y="573" font-family="Arial,sans-serif" font-size="12" font-weight="700" letter-spacing=".6" fill="#71839a">HIGHER IS BETTER</text>
+<text x="685" y="628" font-family="Arial,sans-serif" font-size="14" fill="#42546c">KUR-CF</text>
+<rect x="832" y="609" width="275" height="28" rx="6" fill="#e9eef5"/>
+<rect x="832" y="609" width="75.137" height="28" rx="6" fill="#2463a7"/>
+<text x="916.14" y="629" font-family="Arial,sans-serif" font-size="14" font-weight="700" fill="#23354c">1.08%</text>
+<text x="685" y="683" font-family="Arial,sans-serif" font-size="14" fill="#42546c">UserCF</text>
+<rect x="832" y="664" width="275" height="28" rx="6" fill="#e9eef5"/>
+<rect x="832" y="664" width="75.137" height="28" rx="6" fill="#0f9c8a"/>
+<text x="916.14" y="684" font-family="Arial,sans-serif" font-size="14" font-weight="700" fill="#23354c">1.08%</text>
+<text x="685" y="738" font-family="Arial,sans-serif" font-size="14" fill="#42546c">Cluster-Pearson</text>
+<rect x="832" y="719" width="275" height="28" rx="6" fill="#e9eef5"/>
+<rect x="832" y="719" width="225.410" height="28" rx="6" fill="#d68a29"/>
+<text x="1066.41" y="739" font-family="Arial,sans-serif" font-size="14" font-weight="700" fill="#23354c">3.23%</text>
+<text x="832" y="787" font-family="Arial,sans-serif" font-size="12" fill="#8190a2">0</text>
+<line x1="55" y1="826" x2="1225" y2="826" stroke="#e4e9f1"/>
+<text x="55" y="849" font-family="Arial,sans-serif" font-size="13" fill="#64748b">Source: committed benchmarks/*.json · Bars start at zero · Rankings have substantial uncertainty at this sample size.</text>
+</svg>

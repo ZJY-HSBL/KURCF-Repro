@@ -29,9 +29,22 @@ jobs:
       - name: CLI help
         run: kurcf --help
 
+  figures:
+    name: Verify reproducible SVG figures
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Regenerate figures from benchmark JSON
+        run: node scripts/render_figures.mjs
+      - name: Ensure committed figures match JSON
+        run: git diff --exit-code -- assets/figures/
+
   release:
     name: Build and release
-    needs: test
+    needs: [test, figures]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:

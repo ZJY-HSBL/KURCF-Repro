@@ -34,10 +34,12 @@ for (const { name, label, latex } of data.formulas) {
   if (!/^[a-z0-9-]+$/.test(name)) throw Error("Unsafe equation name: " + name);
   const node = html.convert(latex, { display: true });
   const rendered = adaptor.outerHTML(node);
-  const match = rendered.match(/<svg\b[\s\S]*?<\/svg>/);
+  const match = rendered.match(/<svg\b[\s\S]*<\/svg>/);
   if (!match || /<merror\b|data-mjx-error/.test(rendered)) {
     throw Error("MathJax failed to render: " + name);
   }
+  // Greedy extraction is deliberate: MathJax radical and stretchy symbols
+  // can embed nested <svg> elements. Non-greedy matching truncated Eq. (6).
   let image = match[0];
   image = image.replace(/style="[^"]*"/, 'style="color:#172b46;background-color:#ffffff"');
   image = image.replace("<svg ", '<svg aria-label="' + xmlEscape(label) + '" ');

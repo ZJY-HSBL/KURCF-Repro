@@ -26,6 +26,8 @@ jobs:
         run: npm install --no-save --no-package-lock mathjax-full@3.2.2
       - name: Render equation SVGs
         run: node scripts/render_equations.cjs
+      - name: Check XML validity and both README image links
+        run: python3 scripts/validate_equations.py
       - name: Commit generated SVG assets
         run: |
           git add assets/equations/*.svg

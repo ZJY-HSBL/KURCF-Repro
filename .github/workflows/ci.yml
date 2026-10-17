@@ -43,6 +43,8 @@ jobs:
         run: npm install --no-save --no-package-lock mathjax-full@3.2.2
       - name: Regenerate math SVGs from LaTeX
         run: node scripts/render_equations.cjs
+      - name: Check formula SVG integrity and README references
+        run: python3 scripts/validate_equations.py
       - name: Ensure committed figures match source JSON and LaTeX
         run: git diff --exit-code -- assets/figures/ assets/equations/*.svg
 

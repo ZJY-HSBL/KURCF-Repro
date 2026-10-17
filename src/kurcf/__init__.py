@@ -7,4 +7,4 @@ __all__ = [
     "KURCF", "ClusterResult", "variance_weights", "weighted_kmeans",
     "pearson_similarity", "jaccard_similarity", "combined_similarity",
 ]
-__version__ = "0.1.4"
+__version__ = "0.2.0"

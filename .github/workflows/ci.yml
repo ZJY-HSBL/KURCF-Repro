@@ -27,7 +27,9 @@ jobs:
       - name: Unit tests
         run: pytest -q
       - name: CLI help
-        run: kurcf --help
+        run: |
+          kurcf --help
+          kurcf study --help
 
   figures:
     name: Verify reproducible SVG figures
@@ -47,6 +49,11 @@ jobs:
         run: python3 scripts/validate_equations.py
       - name: Ensure committed figures match source JSON and LaTeX
         run: git diff --exit-code -- assets/figures/ assets/equations/*.svg
+      - name: Check full-rating study artifacts if available
+        run: |
+          if [ -f benchmarks/study/runs/seed-0.json ]; then
+            python3 scripts/summarize_study.py --min-seeds 5 --check
+          fi
 
   release:
     name: Build and release

@@ -240,6 +240,9 @@ KURCF-Repro/
 │   ├── evaluation.py           # MAE/RMSE and ranking metrics
 │   └── cli.py                  # download / benchmark / sweep-k
 ├── tests/test_kurcf.py        # unit and integration checks
+├── tests/test_study.py        # ablation + aggregation validation
+├── src/kurcf/study.py         # controlled full-rating protocol
+├── scripts/summarize_study.py # paired multi-seed stats and SVG reports
 ├── benchmarks/
 │   ├── ml100k-smoke.json      # verified 100K result
 │   ├── ml1m-smoke.json        # verified 1M result
@@ -253,7 +256,26 @@ KURCF-Repro/
 └── .github/workflows/         # tests, releases, real-data smoke runs
 ~~~
 
-## 7. Citation and provenance
+## 7. Full-rating multi-seed ablation study (v0.2.0)
+
+The v0.2.0 study extends the original smoke checks into **five independent user-stratified MovieLens 100K splits (seeds 0–4)**. It evaluates **all 20,000 held-out ratings per seed** for MAE/RMSE, while explicitly limiting Top-10 ranking to **100 sampled eligible users per seed**. Every method within a seed sees the same training data and evaluation population.
+
+The seven controlled variants are KUR-CF, UserCF, clustered Pearson, clustered Jaccard, unclustered hybrid similarity, uniform K-means weights, and non-projected mean centers. The alpha and cluster-count sweeps are **descriptive test-set sensitivity checks, not test-set tuning**. Five-seed means, standard deviations, paired differences and 95% exploratory bootstrap intervals are computed from recorded raw JSON.
+
+[Study protocol](docs/study-protocol.md) · [Automated GitHub Actions study](.github/workflows/movielens-study.yml) · [Generated results (available after successful run)](benchmarks/study/README.md)
+
+Run one full held-out rating evaluation locally:
+
+~~~bash
+kurcf download --dataset ml-100k
+kurcf study --dataset ml-100k --seed 0 --clusters 7 \
+  --neighbors 20 --alpha 0.3 --rating-cases 0 \
+  --ranking-users 100 --top-k 10 --output results/seed-0.json
+~~~
+
+**Provenance:** This study does not claim to reproduce the original paper's unavailable train/test partitions or exact prediction formula. MovieLens 1M remains at the smoke-evaluation stage.
+
+## 8. Citation and provenance
 
 ~~~bibtex
 @article{Zhang2025KURCF,

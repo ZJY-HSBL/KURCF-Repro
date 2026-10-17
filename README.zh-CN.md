@@ -217,6 +217,9 @@ git diff --exit-code -- assets/figures/ assets/equations/*.svg
 | `src/kurcf/data.py` | MovieLens 下载、加载和数据划分 |
 | `src/kurcf/evaluation.py` | 评分误差与 Top-K 指标 |
 | `src/kurcf/cli.py` | 命令行入口 |
+| `src/kurcf/study.py` | 完整评分实验、消融及参数敏感性分析 |
+| `scripts/summarize_study.py` | 多随机种子统计、置信区间和 SVG 生成 |
+| `tests/test_study.py` | 消融实验与统计聚合的自动化测试 |
 | `tests/test_kurcf.py` | 公式、数据和端到端测试 |
 | `benchmarks/*.json` | 100K/1M 实际实验结果 |
 | `assets/figures/*.svg` | 算法流程与结果可视化 |
@@ -228,7 +231,28 @@ git diff --exit-code -- assets/figures/ assets/equations/*.svg
 
 目前未实现原论文全部对照算法（如 ItemCF、SVD），也没有作者的原始划分与完整预测规则。请勿将独立复现的实验指标误称为论文官方结果。
 
-## 7. 引用与许可证
+## 7. 完整评分测试与多随机种子消融实验（v0.2.0）
+
+在先前抽样验证的基础上，v0.2.0 新增 **MovieLens 100K 五组独立随机划分（种子 0–4）**。每组的 MAE、RMSE 使用**全部约 20,000 条测试评分**，而 Precision@10、Recall@10 仍然只使用**100 位抽样用户**，两者不能混为“全部完整测试”。
+
+实验包含七种受控方法：KUR-CF、传统 UserCF、聚类 Pearson、聚类 Jaccard、无聚类混合相似度、均匀属性权重，以及不投影至实际样本的均值中心。还将分析混合系数 α 与聚类数 K 的敏感性。不同方法使用同一随机种子下完全一致的训练集、测试集和评价对象。
+
+实验完成后，将由真实运行记录生成五种子的均值、标准差、探索性 95% Bootstrap 区间，以及三张新的 SVG 对比图。**α、K 的测试集曲线仅用于敏感性描述，不能据此调参后再声称测试结果无偏。**
+
+[详细实验协议](docs/study-protocol.md) · [GitHub Actions 实验流水线](.github/workflows/movielens-study.yml) · [运行成功后生成的实验结果](benchmarks/study/README.md)
+
+单个随机种子的完整评分测试命令：
+
+~~~bash
+kurcf download --dataset ml-100k
+kurcf study --dataset ml-100k --seed 0 --clusters 7 \
+  --neighbors 20 --alpha 0.3 --rating-cases 0 \
+  --ranking-users 100 --top-k 10 --output results/seed-0.json
+~~~
+
+注意：本项目仍然无法还原论文作者未公开的完整实验划分和评分预测细节；MovieLens 1M 暂时仍以抽样实验为主。
+
+## 8. 引用与许可证
 
 ~~~bibtex
 @article{Zhang2025KURCF,

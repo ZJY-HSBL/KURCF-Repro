@@ -10,6 +10,7 @@ from .core import KURCF, weighted_kmeans
 from .data import download_movielens, load_movielens, user_stratified_split
 from .evaluation import rating_metrics, ranking_metrics
 from .study import run_study
+from .nested import run_nested
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -55,6 +56,21 @@ def build_parser() -> argparse.ArgumentParser:
     study.add_argument("--alpha-grid", type=float, nargs="+", default=[0, 0.3, 0.6, 1.0])
     study.add_argument("--cluster-grid", type=int, nargs="+", default=[4, 7, 10])
     study.add_argument("--output", type=Path)
+    nested = subs.add_parser("nested", help="inner-validation tuning and unbiased outer-test evaluation")
+    nested.add_argument("--dataset", choices=["ml-100k", "ml-1m"], default="ml-100k")
+    nested.add_argument("--data-dir", default="data")
+    nested.add_argument("--seed", type=int, default=0)
+    nested.add_argument("--test-ratio", type=float, default=0.2)
+    nested.add_argument("--validation-ratio", type=float, default=0.2)
+    nested.add_argument("--fixed-clusters", type=int, default=7)
+    nested.add_argument("--fixed-alpha", type=float, default=0.3)
+    nested.add_argument("--neighbors", type=int, default=20)
+    nested.add_argument("--top-k", type=int, default=10)
+    nested.add_argument("--ranking-users", type=int, default=0,
+                        help="0 means ALL eligible ranking users")
+    nested.add_argument("--alpha-grid", type=float, nargs="+", default=[0, 0.3, 0.6, 1.0])
+    nested.add_argument("--cluster-grid", type=int, nargs="+", default=[4, 7, 10])
+    nested.add_argument("--output", type=Path)
     return p
 
 
@@ -124,7 +140,8 @@ def main(argv: list[str] | None = None) -> None:
         print(download_movielens(args.dataset, args.data_dir))
         return
     result = (benchmark(args) if args.command == "benchmark" else
-              sweep_k(args) if args.command == "sweep-k" else run_study(args))
+              sweep_k(args) if args.command == "sweep-k" else
+              run_study(args) if args.command == "study" else run_nested(args))
     body = json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False)
     print(body)
     if args.output:

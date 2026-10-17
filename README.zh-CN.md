@@ -274,7 +274,27 @@ kurcf study --dataset ml-100k --seed 0 --clusters 7 \
 python scripts/summarize_study.py --min-seeds 5 --check
 ~~~
 
-## 8. 引用与许可证
+## 8. 独立验证集调参与全部合格用户推荐测试（v0.3.0）
+
+v0.2.1 的 α/K 敏感性曲线是在测试集上计算的，只能用于描述，**不能用它们选出最优参数后再把测试结果当作无偏结论**。v0.3.0 新增独立验证集和外层测试集，解决这一实验设计问题。
+
+先按用户划分外层 80% 训练集和 20% 测试集，再将外层训练集按 80/20 划分内部训练集与验证集。在验证集上评估 **K={4,7,10} 与 α={0,0.3,0.6,1.0} 的 12 种组合**，仅依据验证集 MAE 选择参数；随后在完整外层训练集上重新拟合模型，**最后才使用外层测试集评价**。
+
+外层测试不仅对全部约 20,000 条评分计算 MAE/RMSE，还将 Precision@10、Recall@10 扩展至**所有符合条件的用户**，不再只抽取 100 位用户。五组随机划分均保留原始 JSON、训练/验证/测试集 SHA-256 指纹、选择的参数和统计区间，并与固定 KUR-CF、纯 Jaccard 聚类、无聚类混合相似度、传统 UserCF 进行同一划分下的对比。
+
+[完整实验协议](docs/nested-protocol.md) · [GitHub Actions 自动实验](.github/workflows/movielens-nested.yml) · [实验完成后生成的结果](benchmarks/nested/README.md)
+
+~~~bash
+kurcf download --dataset ml-100k
+kurcf nested --dataset ml-100k --seed 0 --fixed-clusters 7 \
+  --fixed-alpha 0.3 --alpha-grid 0 0.3 0.6 1.0 \
+  --cluster-grid 4 7 10 --ranking-users 0 \
+  --output results/nested-seed-0.json
+~~~
+
+**当前说明：**v0.3.0 首先提交实验代码与自动化流程；实际实验成功之前，不会编造新指标或实验图片。验证集选取的目标是评分 MAE，不等于同时优化了 Top-K 推荐效果。
+
+## 9. 引用与许可证
 
 ~~~bibtex
 @article{Zhang2025KURCF,

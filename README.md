@@ -299,7 +299,29 @@ kurcf study --dataset ml-100k --seed 0 --clusters 7 \
 python scripts/summarize_study.py --min-seeds 5 --check
 ~~~
 
-## 8. Citation and provenance
+## 8. Validation-only hyperparameter selection and full-user ranking (v0.3.0)
+
+The v0.2.1 alpha/K sensitivity plots were measured on held-out test data, so they **cannot be used to select a winning model without test leakage**. The new v0.3.0 experiment addresses this with a **nested holdout**:
+
+- Outer 80/20 user-stratified train/test split; an inner 80/20 split of outer training is used exclusively for tuning.
+- Prespecified 12-point grid: K = 4, 7, 10; alpha = 0, 0.3, 0.6, 1.0. Select on **inner-validation MAE**, never outer-test MAE.
+- Refit the selected model on outer training; evaluate all outer-test ratings and **all eligible ranking users**, not a 100-user sample.
+- Compare fixed KUR-CF, selected KUR-CF, clustered Jaccard, unclustered hybrid and UserCF on matched outer-test populations.
+- Five independent split seeds; preserve original JSON, selected parameters, paired metrics, bootstrap intervals and a generated SVG figure.
+
+[Full protocol](docs/nested-protocol.md) · [Automated workflow](.github/workflows/movielens-nested.yml) · [Nested-study results, once workflow succeeds](benchmarks/nested/README.md)
+
+~~~bash
+kurcf download --dataset ml-100k
+kurcf nested --dataset ml-100k --seed 0 --fixed-clusters 7 \
+  --fixed-alpha 0.3 --alpha-grid 0 0.3 0.6 1.0 \
+  --cluster-grid 4 7 10 --ranking-users 0 \
+  --output results/nested-seed-0.json
+~~~
+
+**Status:** Code and automation are included in this release; do not infer any v0.3.0 numerical result before the real five-seed jobs finish. This is still an independent reproduction, not the original authors' undisclosed experiment.
+
+## 9. Citation and provenance
 
 ~~~bibtex
 @article{Zhang2025KURCF,

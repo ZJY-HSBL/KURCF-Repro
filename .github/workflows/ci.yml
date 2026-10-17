@@ -30,6 +30,7 @@ jobs:
         run: |
           kurcf --help
           kurcf study --help
+          kurcf nested --help
 
   figures:
     name: Verify reproducible SVG figures
@@ -53,6 +54,9 @@ jobs:
         run: |
           if [ -f benchmarks/study/runs/seed-0.json ]; then
             python3 scripts/summarize_study.py --min-seeds 5 --check
+          fi
+          if [ -f benchmarks/nested/runs/seed-0.json ]; then
+            python3 scripts/summarize_nested.py --min-seeds 5 --check
           fi
 
   release:

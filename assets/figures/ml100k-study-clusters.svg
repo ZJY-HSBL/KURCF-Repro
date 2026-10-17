@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1300" height="660" viewBox="0 0 1300 660" role="img" aria-label="KUR-CF | Cluster-count sensitivity">
+<title>KUR-CF | Cluster-count sensitivity</title>
+<rect width="1300" height="660" fill="#ffffff"/>
+<text x="52.0" y="61.0" font-family="Arial,sans-serif" font-size="30" font-weight="700" fill="#26384f" text-anchor="start">KUR-CF | Cluster-count sensitivity</text>
+<text x="52.0" y="92.0" font-family="Arial,sans-serif" font-size="16" font-weight="400" fill="#64748b" text-anchor="start">Means and 95% bootstrap CIs across five split seeds; test-set sensitivity is NOT validation-set tuning.</text>
+<rect x="54" y="137" width="608" height="477" rx="16" fill="#f8fafc" stroke="#e2e8f0"/>
+<text x="79.0" y="179.0" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#26384f" text-anchor="start">MAE (lower is better)</text>
+<line x1="149.0" y1="530.0" x2="612.0" y2="530.0" stroke="#dce4ed" stroke-width="1.0"/>
+<text x="140.0" y="535.0" font-family="Arial,sans-serif" font-size="12" font-weight="400" fill="#64748b" text-anchor="end">0.805</text>
+<line x1="149.0" y1="456.2" x2="612.0" y2="456.2" stroke="#dce4ed" stroke-width="1.0"/>
+<text x="140.0" y="461.2" font-family="Arial,sans-serif" font-size="12" font-weight="400" fill="#64748b" text-anchor="end">0.811</text>
+<line x1="149.0" y1="382.5" x2="612.0" y2="382.5" stroke="#dce4ed" stroke-width="1.0"/>
+<text x="140.0" y="387.5" font-family="Arial,sans-serif" font-size="12" font-weight="400" fill="#64748b" text-anchor="end">0.816</text>
+<line x1="149.0" y1="308.8" x2="612.0" y2="308.8" stroke="#dce4ed" stroke-width="1.0"/>
+<text x="140.0" y="313.8" font-family="Arial,sans-serif" font-size="12" font-weight="400" fill="#64748b" text-anchor="end">0.822</text>
+<line x1="149.0" y1="235.0" x2="612.0" y2="235.0" stroke="#dce4ed" stroke-width="1.0"/>
+<text x="140.0" y="240.0" font-family="Arial,sans-serif" font-size="12" font-weight="400" fill="#64748b" text-anchor="end">0.827</text>
+<line x1="149.0" y1="396.1" x2="380.5" y2="412.9" stroke="#245eab" stroke-width="3"/>
+<line x1="380.5" y1="412.9" x2="612.0" y2="342.9" stroke="#245eab" stroke-width="3"/>
+<line x1="149.0" y1="443.1" x2="149.0" y2="352.5" stroke="#0d998c" stroke-width="2"/>
+<circle cx="149.0" cy="396.1" r="6" fill="#245eab"/>
+<text x="149.0" y="560.0" font-family="Arial,sans-serif" font-size="15" font-weight="400" fill="#26384f" text-anchor="middle">4</text>
+<line x1="380.5" y1="462.8" x2="380.5" y2="370.7" stroke="#0d998c" stroke-width="2"/>
+<circle cx="380.5" cy="412.9" r="6" fill="#245eab"/>
+<text x="380.5" y="560.0" font-family="Arial,sans-serif" font-size="15" font-weight="400" fill="#26384f" text-anchor="middle">7</text>
+<line x1="612.0" y1="395.2" x2="612.0" y2="302.2" stroke="#0d998c" stroke-width="2"/>
+<circle cx="612.0" cy="342.9" r="6" fill="#245eab"/>
+<text x="612.0" y="560.0" font-family="Arial,sans-serif" font-size="15" font-weight="400" fill="#26384f" text-anchor="middle">10</text>
+<text x="380.5" y="600.0" font-family="Arial,sans-serif" font-size="15" font-weight="400" fill="#64748b" text-anchor="middle">Number of clusters K</text>
+<rect x="692" y="137" width="608" height="477" rx="16" fill="#f8fafc" stroke="#e2e8f0"/>
+<text x="717.0" y="179.0" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#26384f" text-anchor="start">Recall@10 (%) (higher is better)</text>
+<line x1="787.0" y1="530.0" x2="1250.0" y2="530.0" stroke="#dce4ed" stroke-width="1.0"/>
+<text x="778.0" y="535.0" font-family="Arial,sans-serif" font-size="12" font-weight="400" fill="#64748b" text-anchor="end">1.167</text>
+<line x1="787.0" y1="456.2" x2="1250.0" y2="456.2" stroke="#dce4ed" stroke-width="1.0"/>
+<text x="778.0" y="461.2" font-family="Arial,sans-serif" font-size="12" font-weight="400" fill="#64748b" text-anchor="end">1.599</text>
+<line x1="787.0" y1="382.5" x2="1250.0" y2="382.5" stroke="#dce4ed" stroke-width="1.0"/>
+<text x="778.0" y="387.5" font-family="Arial,sans-serif" font-size="12" font-weight="400" fill="#64748b" text-anchor="end">2.031</text>
+<line x1="787.0" y1="308.8" x2="1250.0" y2="308.8" stroke="#dce4ed" stroke-width="1.0"/>
+<text x="778.0" y="313.8" font-family="Arial,sans-serif" font-size="12" font-weight="400" fill="#64748b" text-anchor="end">2.462</text>
+<line x1="787.0" y1="235.0" x2="1250.0" y2="235.0" stroke="#dce4ed" stroke-width="1.0"/>
+<text x="778.0" y="240.0" font-family="Arial,sans-serif" font-size="12" font-weight="400" fill="#64748b" text-anchor="end">2.894</text>
+<line x1="787.0" y1="385.8" x2="1018.5" y2="400.3" stroke="#245eab" stroke-width="3"/>
+<line x1="1018.5" y1="400.3" x2="1250.0" y2="385.2" stroke="#245eab" stroke-width="3"/>
+<line x1="787.0" y1="487.9" x2="787.0" y2="277.1" stroke="#0d998c" stroke-width="2"/>
+<circle cx="787.0" cy="385.8" r="6" fill="#245eab"/>
+<text x="787.0" y="560.0" font-family="Arial,sans-serif" font-size="15" font-weight="400" fill="#26384f" text-anchor="middle">4</text>
+<line x1="1018.5" y1="436.9" x2="1018.5" y2="353.3" stroke="#0d998c" stroke-width="2"/>
+<circle cx="1018.5" cy="400.3" r="6" fill="#245eab"/>
+<text x="1018.5" y="560.0" font-family="Arial,sans-serif" font-size="15" font-weight="400" fill="#26384f" text-anchor="middle">7</text>
+<line x1="1250.0" y1="466.0" x2="1250.0" y2="304.5" stroke="#0d998c" stroke-width="2"/>
+<circle cx="1250.0" cy="385.2" r="6" fill="#245eab"/>
+<text x="1250.0" y="560.0" font-family="Arial,sans-serif" font-size="15" font-weight="400" fill="#26384f" text-anchor="middle">10</text>
+<text x="1018.5" y="600.0" font-family="Arial,sans-serif" font-size="15" font-weight="400" fill="#64748b" text-anchor="middle">Number of clusters K</text>
+</svg>

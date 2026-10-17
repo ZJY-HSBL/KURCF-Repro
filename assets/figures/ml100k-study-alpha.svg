@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1300" height="660" viewBox="0 0 1300 660" role="img" aria-label="KUR-CF | Alpha sensitivity">
+<title>KUR-CF | Alpha sensitivity</title>
+<rect width="1300" height="660" fill="#ffffff"/>
+<text x="52.0" y="61.0" font-family="Arial,sans-serif" font-size="30" font-weight="700" fill="#26384f" text-anchor="start">KUR-CF | Alpha sensitivity</text>
+<text x="52.0" y="92.0" font-family="Arial,sans-serif" font-size="16" font-weight="400" fill="#64748b" text-anchor="start">Means and 95% bootstrap CIs across five split seeds; test-set sensitivity is NOT validation-set tuning.</text>
+<rect x="54" y="137" width="608" height="477" rx="16" fill="#f8fafc" stroke="#e2e8f0"/>
+<text x="79.0" y="179.0" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#26384f" text-anchor="start">MAE (lower is better)</text>
+<line x1="149.0" y1="530.0" x2="612.0" y2="530.0" stroke="#dce4ed" stroke-width="1.0"/>
+<text x="140.0" y="535.0" font-family="Arial,sans-serif" font-size="12" font-weight="400" fill="#64748b" text-anchor="end">0.799</text>
+<line x1="149.0" y1="456.2" x2="612.0" y2="456.2" stroke="#dce4ed" stroke-width="1.0"/>
+<text x="140.0" y="461.2" font-family="Arial,sans-serif" font-size="12" font-weight="400" fill="#64748b" text-anchor="end">0.810</text>
+<line x1="149.0" y1="382.5" x2="612.0" y2="382.5" stroke="#dce4ed" stroke-width="1.0"/>
+<text x="140.0" y="387.5" font-family="Arial,sans-serif" font-size="12" font-weight="400" fill="#64748b" text-anchor="end">0.820</text>
+<line x1="149.0" y1="308.8" x2="612.0" y2="308.8" stroke="#dce4ed" stroke-width="1.0"/>
+<text x="140.0" y="313.8" font-family="Arial,sans-serif" font-size="12" font-weight="400" fill="#64748b" text-anchor="end">0.831</text>
+<line x1="149.0" y1="235.0" x2="612.0" y2="235.0" stroke="#dce4ed" stroke-width="1.0"/>
+<text x="140.0" y="240.0" font-family="Arial,sans-serif" font-size="12" font-weight="400" fill="#64748b" text-anchor="end">0.841</text>
+<line x1="149.0" y1="459.4" x2="303.3" y2="428.2" stroke="#245eab" stroke-width="3"/>
+<line x1="303.3" y1="428.2" x2="457.7" y2="334.8" stroke="#245eab" stroke-width="3"/>
+<line x1="457.7" y1="334.8" x2="612.0" y2="290.2" stroke="#245eab" stroke-width="3"/>
+<line x1="149.0" y1="487.9" x2="149.0" y2="432.0" stroke="#0d998c" stroke-width="2"/>
+<circle cx="149.0" cy="459.4" r="6" fill="#245eab"/>
+<text x="149.0" y="560.0" font-family="Arial,sans-serif" font-size="15" font-weight="400" fill="#26384f" text-anchor="middle">0.0</text>
+<line x1="303.3" y1="454.2" x2="303.3" y2="406.2" stroke="#0d998c" stroke-width="2"/>
+<circle cx="303.3" cy="428.2" r="6" fill="#245eab"/>
+<text x="303.3" y="560.0" font-family="Arial,sans-serif" font-size="15" font-weight="400" fill="#26384f" text-anchor="middle">0.3</text>
+<line x1="457.7" y1="346.4" x2="457.7" y2="319.2" stroke="#0d998c" stroke-width="2"/>
+<circle cx="457.7" cy="334.8" r="6" fill="#245eab"/>
+<text x="457.7" y="560.0" font-family="Arial,sans-serif" font-size="15" font-weight="400" fill="#26384f" text-anchor="middle">0.6</text>
+<line x1="612.0" y1="299.3" x2="612.0" y2="277.1" stroke="#0d998c" stroke-width="2"/>
+<circle cx="612.0" cy="290.2" r="6" fill="#245eab"/>
+<text x="612.0" y="560.0" font-family="Arial,sans-serif" font-size="15" font-weight="400" fill="#26384f" text-anchor="middle">1.0</text>
+<text x="380.5" y="600.0" font-family="Arial,sans-serif" font-size="15" font-weight="400" fill="#64748b" text-anchor="middle">Pearson mixture weight α</text>
+<rect x="692" y="137" width="608" height="477" rx="16" fill="#f8fafc" stroke="#e2e8f0"/>
+<text x="717.0" y="179.0" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#26384f" text-anchor="start">Recall@10 (%) (higher is better)</text>
+<line x1="787.0" y1="530.0" x2="1250.0" y2="530.0" stroke="#dce4ed" stroke-width="1.0"/>
+<text x="778.0" y="535.0" font-family="Arial,sans-serif" font-size="12" font-weight="400" fill="#64748b" text-anchor="end">1.282</text>
+<line x1="787.0" y1="456.2" x2="1250.0" y2="456.2" stroke="#dce4ed" stroke-width="1.0"/>
+<text x="778.0" y="461.2" font-family="Arial,sans-serif" font-size="12" font-weight="400" fill="#64748b" text-anchor="end">1.659</text>
+<line x1="787.0" y1="382.5" x2="1250.0" y2="382.5" stroke="#dce4ed" stroke-width="1.0"/>
+<text x="778.0" y="387.5" font-family="Arial,sans-serif" font-size="12" font-weight="400" fill="#64748b" text-anchor="end">2.036</text>
+<line x1="787.0" y1="308.8" x2="1250.0" y2="308.8" stroke="#dce4ed" stroke-width="1.0"/>
+<text x="778.0" y="313.8" font-family="Arial,sans-serif" font-size="12" font-weight="400" fill="#64748b" text-anchor="end">2.414</text>
+<line x1="787.0" y1="235.0" x2="1250.0" y2="235.0" stroke="#dce4ed" stroke-width="1.0"/>
+<text x="778.0" y="240.0" font-family="Arial,sans-serif" font-size="12" font-weight="400" fill="#64748b" text-anchor="end">2.791</text>
+<line x1="787.0" y1="440.4" x2="941.3" y2="404.0" stroke="#245eab" stroke-width="3"/>
+<line x1="941.3" y1="404.0" x2="1095.7" y2="396.8" stroke="#245eab" stroke-width="3"/>
+<line x1="1095.7" y1="396.8" x2="1250.0" y2="379.9" stroke="#245eab" stroke-width="3"/>
+<line x1="787.0" y1="487.9" x2="787.0" y2="403.9" stroke="#0d998c" stroke-width="2"/>
+<circle cx="787.0" cy="440.4" r="6" fill="#245eab"/>
+<text x="787.0" y="560.0" font-family="Arial,sans-serif" font-size="15" font-weight="400" fill="#26384f" text-anchor="middle">0.0</text>
+<line x1="941.3" y1="445.8" x2="941.3" y2="350.2" stroke="#0d998c" stroke-width="2"/>
+<circle cx="941.3" cy="404.0" r="6" fill="#245eab"/>
+<text x="941.3" y="560.0" font-family="Arial,sans-serif" font-size="15" font-weight="400" fill="#26384f" text-anchor="middle">0.3</text>
+<line x1="1095.7" y1="454.9" x2="1095.7" y2="338.6" stroke="#0d998c" stroke-width="2"/>
+<circle cx="1095.7" cy="396.8" r="6" fill="#245eab"/>
+<text x="1095.7" y="560.0" font-family="Arial,sans-serif" font-size="15" font-weight="400" fill="#26384f" text-anchor="middle">0.6</text>
+<line x1="1250.0" y1="480.4" x2="1250.0" y2="277.1" stroke="#0d998c" stroke-width="2"/>
+<circle cx="1250.0" cy="379.9" r="6" fill="#245eab"/>
+<text x="1250.0" y="560.0" font-family="Arial,sans-serif" font-size="15" font-weight="400" fill="#26384f" text-anchor="middle">1.0</text>
+<text x="1018.5" y="600.0" font-family="Arial,sans-serif" font-size="15" font-weight="400" fill="#64748b" text-anchor="middle">Pearson mixture weight α</text>
+</svg>

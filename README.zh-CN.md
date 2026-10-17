@@ -274,15 +274,31 @@ kurcf study --dataset ml-100k --seed 0 --clusters 7 \
 python scripts/summarize_study.py --min-seeds 5 --check
 ~~~
 
-## 8. 独立验证集调参与全部合格用户推荐测试（v0.3.0）
+## 8. 独立验证集调参与全用户推荐测试（v0.3.1）
 
-v0.2.1 的 α/K 敏感性曲线是在测试集上计算的，只能用于描述，**不能用它们选出最优参数后再把测试结果当作无偏结论**。v0.3.0 新增独立验证集和外层测试集，解决这一实验设计问题。
+**五组 MovieLens 100K 真实实验已经完成，全部原始记录、统计报告与 SVG 图已提交。** 不同于 v0.2.1 在测试集上做描述性敏感性分析，这次使用**独立的内部验证集选择 K 和 α**，再用完整外层训练集重新拟合，最后才对外层测试集计算指标。每组对全部 **20,000 条测试评分**进行评价，Top-10 指标覆盖**所有符合条件的 927–935 位用户**，不再只抽取 100 人。
 
-先按用户划分外层 80% 训练集和 20% 测试集，再将外层训练集按 80/20 划分内部训练集与验证集。在验证集上评估 **K={4,7,10} 与 α={0,0.3,0.6,1.0} 的 12 种组合**，仅依据验证集 MAE 选择参数；随后在完整外层训练集上重新拟合模型，**最后才使用外层测试集评价**。
+[完整实验报告](benchmarks/nested/README.md) · [五组原始 JSON](benchmarks/nested/runs/) · [统计结果及配对 Bootstrap 区间](benchmarks/nested/ml100k-summary.json) · [GitHub Actions 成功记录](https://github.com/ZJY-HSBL/KURCF-Repro/actions/runs/39017235685) · [实验协议](docs/nested-protocol.md)
 
-外层测试不仅对全部约 20,000 条评分计算 MAE/RMSE，还将 Precision@10、Recall@10 扩展至**所有符合条件的用户**，不再只抽取 100 位用户。五组随机划分均保留原始 JSON、训练/验证/测试集 SHA-256 指纹、选择的参数和统计区间，并与固定 KUR-CF、纯 Jaccard 聚类、无聚类混合相似度、传统 UserCF 进行同一划分下的对比。
+![独立验证集选参与外层测试集真实结果](assets/figures/ml100k-nested-overview.svg)
 
-[完整实验协议](docs/nested-protocol.md) · [GitHub Actions 自动实验](.github/workflows/movielens-nested.yml) · [实验完成后生成的结果](benchmarks/nested/README.md)
+*图 7. 五随机种子外层测试集结果。误差线是基于五组随机划分的探索性 95% Bootstrap 区间，并非五个独立数据集的置信区间。*
+
+| 外层测试方法 | MAE ↓ | RMSE ↓ | Precision@10 ↑ | Recall@10 ↑ |
+|:--|--:|--:|--:|--:|
+| 固定 KUR-CF（K=7，α=0.3） | 0.8139 | 1.0457 | 2.63% | 2.21% |
+| **验证集选参 KUR-CF** | **0.8081** | **1.0361** | 2.14% | 1.80% |
+| 聚类 Jaccard（K=7） | 0.8095 | 1.0374 | 2.20% | 1.85% |
+| **不聚类混合相似度** | 0.8339 | 1.0693 | **3.62%** | **3.04%** |
+| 传统 Pearson UserCF | 0.8634 | 1.0955 | 2.39% | 2.01% |
+
+**五组验证集全部选择 K=4、α=0。** 需要注意，这两个参数恰好都是预设网格的最小边界，因此不能说已经找到全局最优参数。
+
+**实验分析：**与固定 KUR-CF 相比，验证集选参后平均 MAE 下降约 **0.0059**，但配对 Bootstrap 95% 区间为 **[-0.0003, 0.0117]**，跨越零，不能据此认定改善稳定显著。与此同时，Recall@10 从 **2.21% 降至 1.80%**；不聚类混合相似度模型则在全体合格用户推荐评价中取得最高的 Precision@10 和 Recall@10。
+
+这直接暴露了研究问题：**评分误差最低的配置，未必具有最好的推荐排序能力。** 下一步应当在独立验证集上扩展 K=2、3 及 α 接近零的候选参数，并考虑单独针对 Top-K 排序指标进行选择，而不是继续只优化 MAE。同时应测量聚类加速带来的收益是否足以抵消召回率下降。
+
+单种子复现实验：
 
 ~~~bash
 kurcf download --dataset ml-100k
@@ -292,7 +308,14 @@ kurcf nested --dataset ml-100k --seed 0 --fixed-clusters 7 \
   --output results/nested-seed-0.json
 ~~~
 
-**当前说明：**v0.3.0 首先提交实验代码与自动化流程；实际实验成功之前，不会编造新指标或实验图片。验证集选取的目标是评分 MAE，不等于同时优化了 Top-K 推荐效果。
+由原始 JSON 重新生成、校验统计表和图片：
+
+~~~bash
+python scripts/summarize_nested.py --min-seeds 5
+python scripts/summarize_nested.py --min-seeds 5 --check
+~~~
+
+本项目仍属于**独立复现**，原论文未公开的完整实验划分和评分预测细节无法据此验证；五组随机划分也不能代表跨数据集的泛化性能。
 
 ## 9. 引用与许可证
 

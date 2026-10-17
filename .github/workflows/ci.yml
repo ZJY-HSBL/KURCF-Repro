@@ -31,6 +31,7 @@ jobs:
           kurcf --help
           kurcf study --help
           kurcf nested --help
+          python scripts/summarize_nested.py --help
 
   figures:
     name: Verify reproducible SVG figures

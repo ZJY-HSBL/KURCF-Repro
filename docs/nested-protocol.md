@@ -1,4 +1,4 @@
-# Nested validation and full eligible-user ranking (v0.3.0)
+# Nested validation and full eligible-user ranking (v0.3.1)
 
 This is an independent reproduction protocol, not an assertion that the
 original Scientific Reports paper used these exact partitions or predictions.
@@ -64,3 +64,7 @@ complete. Expected artifacts are:
 The original paper did not fully specify its train/test partitions, exact
 rating prediction equation or fallbacks. Numerical agreement with the
 paper cannot be asserted. Do not fabricate results if jobs fail.
+
+## Verified experimental outcome (v0.3.1)
+
+[Successful five-seed workflow](https://github.com/ZJY-HSBL/KURCF-Repro/actions/runs/39017235685) produced the [original seed JSON](../benchmarks/nested/runs/), [report](../benchmarks/nested/README.md) and [SVG chart](../assets/figures/ml100k-nested-overview.svg). Every inner validation split selected K=4 and alpha=0, both boundary values of the prespecified grid. Mean outer-test MAE improved from 0.8139 (fixed KUR-CF) to 0.8081, but the paired 95% bootstrap interval for the difference spans zero. Mean Recall@10 fell from 2.21% to 1.80%. The unclustered hybrid attained 3.04% Recall@10. This supports separate research on rating-error selection and ranking objectives; it does not establish universal superiority.

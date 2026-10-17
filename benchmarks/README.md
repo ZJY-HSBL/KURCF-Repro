@@ -1,6 +1,6 @@
 # Verified smoke runs on official MovieLens datasets
 
-**New v0.3.0 protocol:** [Nested validation and full eligible-user ranking](../docs/nested-protocol.md) separates hyperparameter selection from the outer test. Its [results](nested/README.md) are generated only after five real runs complete. Previous smoke and ablation measurements remain unchanged.
+**Completed v0.3.1:** The [nested-validation and full eligible-user ranking study](nested/README.md) separates model selection from the outer test and includes original per-seed JSON, five-seed statistics and a generated SVG figure. See the [protocol](../docs/nested-protocol.md). Previous smoke and ablation measurements remain unchanged.
 
 
 **Completed in v0.2.1:** The [five-seed full-rating study](study/README.md) includes seven ablations, paired bootstrap intervals, original per-seed JSON and three SVG figures. See the [documented protocol](../docs/study-protocol.md). The figures and tables below remain the original **small-sample smoke runs**, retained for provenance.

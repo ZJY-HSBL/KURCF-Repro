@@ -299,17 +299,31 @@ kurcf study --dataset ml-100k --seed 0 --clusters 7 \
 python scripts/summarize_study.py --min-seeds 5 --check
 ~~~
 
-## 8. Validation-only hyperparameter selection and full-user ranking (v0.3.0)
+## 8. Nested validation and full eligible-user ranking (v0.3.1)
 
-The v0.2.1 alpha/K sensitivity plots were measured on held-out test data, so they **cannot be used to select a winning model without test leakage**. The new v0.3.0 experiment addresses this with a **nested holdout**:
+**Five real MovieLens 100K runs completed.** Unlike the descriptive v0.2.1 test-set sensitivity curves, this experiment uses an **inner validation set to choose K and alpha**, then refits on outer training and evaluates on a strictly held-out outer test. Each of five seeds evaluates all **20,000 outer-test ratings** and **all eligible ranking users** (927–935 per split, not 100 sampled users).
 
-- Outer 80/20 user-stratified train/test split; an inner 80/20 split of outer training is used exclusively for tuning.
-- Prespecified 12-point grid: K = 4, 7, 10; alpha = 0, 0.3, 0.6, 1.0. Select on **inner-validation MAE**, never outer-test MAE.
-- Refit the selected model on outer training; evaluate all outer-test ratings and **all eligible ranking users**, not a 100-user sample.
-- Compare fixed KUR-CF, selected KUR-CF, clustered Jaccard, unclustered hybrid and UserCF on matched outer-test populations.
-- Five independent split seeds; preserve original JSON, selected parameters, paired metrics, bootstrap intervals and a generated SVG figure.
+[Complete report](benchmarks/nested/README.md) · [Original five-seed JSON](benchmarks/nested/runs/) · [Summary with paired bootstrap intervals](benchmarks/nested/ml100k-summary.json) · [Successful automated run](https://github.com/ZJY-HSBL/KURCF-Repro/actions/runs/39017235685) · [Protocol](docs/nested-protocol.md)
 
-[Full protocol](docs/nested-protocol.md) · [Automated workflow](.github/workflows/movielens-nested.yml) · [Nested-study results, once workflow succeeds](benchmarks/nested/README.md)
+![Nested validation outer-test comparison](assets/figures/ml100k-nested-overview.svg)
+
+*Figure 7. Real nested-validation experiment, five user-stratified outer splits. The 95% bootstrap intervals are exploratory because all seeds reuse the same dataset.*
+
+| Outer-test method | MAE ↓ | RMSE ↓ | Precision@10 ↑ | Recall@10 ↑ |
+|:--|--:|--:|--:|--:|
+| Fixed KUR-CF (K=7, α=.3) | 0.8139 | 1.0457 | 2.63% | 2.21% |
+| **Validation-selected KUR-CF** | **0.8081** | **1.0361** | 2.14% | 1.80% |
+| Clustered Jaccard (K=7) | 0.8095 | 1.0374 | 2.20% | 1.85% |
+| **Unclustered hybrid** | 0.8339 | 1.0693 | **3.62%** | **3.04%** |
+| Pearson UserCF | 0.8634 | 1.0955 | 2.39% | 2.01% |
+
+**Validation-selected settings:** all five splits independently selected **K=4, α=0** from the prespecified 12-point grid. These are the **smallest K and alpha in the tested grid**, so this is not evidence of a globally optimal configuration.
+
+**Interpretation:** Validation selection lowered mean MAE by **0.0059** relative to fixed KUR-CF, but the paired baseline-minus-selected 95% bootstrap interval is **[-0.0003, 0.0117]**, crossing zero. The selected model also has **lower Top-10 recall (1.80% versus 2.21%)**. The unclustered hybrid is strongest on full-user Top-10 ranking among these tested methods. Optimizing rating MAE **does not imply** optimizing recommendation relevance.
+
+Next research questions are now concrete: extend the validation grid below K=4 and near α=0, evaluate selection on **ranking objectives**, and test whether clustering improves runtime enough to justify its recall loss. Such extensions require new validation-only selection protocols; the existing outer-test results must not be recycled as a tuning signal.
+
+Reproduce one seed:
 
 ~~~bash
 kurcf download --dataset ml-100k
@@ -319,7 +333,14 @@ kurcf nested --dataset ml-100k --seed 0 --fixed-clusters 7 \
   --output results/nested-seed-0.json
 ~~~
 
-**Status:** Code and automation are included in this release; do not infer any v0.3.0 numerical result before the real five-seed jobs finish. This is still an independent reproduction, not the original authors' undisclosed experiment.
+Rebuild and verify all committed nested-study figures and summaries:
+
+~~~bash
+python scripts/summarize_nested.py --min-seeds 5
+python scripts/summarize_nested.py --min-seeds 5 --check
+~~~
+
+The study is an **independent implementation**; the original paper's train/test partitions and complete rating prediction rule are unavailable. It does not confirm the paper's reported effect sizes.
 
 ## 9. Citation and provenance
 

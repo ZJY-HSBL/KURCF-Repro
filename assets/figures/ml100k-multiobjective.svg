@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="760" viewBox="0 0 1280 760" role="img" aria-label="MovieLens multiobjective results">
+<title>MovieLens 100K: validation objective versus outer test</title>
+<rect width="1280" height="760" fill="#ffffff"/>
+<text x="42" y="55" font-family="Arial,sans-serif" font-size="29" fill="#283749">KUR-CF | Validation objective versus outer-test quality</text>
+<text x="42" y="86" font-family="Arial,sans-serif" font-size="16" fill="#60748a">Five real splits; error bars: exploratory 95% bootstrap interval</text>
+<rect x="42" y="122" width="600" height="566" rx="15" fill="#f8fafc" stroke="#e0e8f0"/>
+<text x="64" y="166" font-family="Arial,sans-serif" font-size="21" fill="#283749">MAE (lower better)</text>
+<text x="66" y="207" font-family="Arial,sans-serif" font-size="15" fill="#283749">Fixed KUR-CF</text>
+<rect x="66" y="219" width="445" height="28" rx="5" fill="#e8edf3"/>
+<rect x="66" y="219" width="348.18" height="28" rx="5" fill="#527aaf"/>
+<line x1="412.58" y1="233" x2="415.49" y2="233" stroke="#283749" stroke-width="2"/>
+<text x="525" y="239" font-family="Arial,sans-serif" font-size="16" fill="#283749">0.8139</text>
+<text x="66" y="296" font-family="Arial,sans-serif" font-size="15" fill="#283749">Validation MAE selection</text>
+<rect x="66" y="308" width="445" height="28" rx="5" fill="#e8edf3"/>
+<rect x="66" y="308" width="338.01" height="28" rx="5" fill="#13847c"/>
+<line x1="402.72" y1="322" x2="405.31" y2="322" stroke="#283749" stroke-width="2"/>
+<text x="525" y="328" font-family="Arial,sans-serif" font-size="16" fill="#283749">0.7902</text>
+<text x="66" y="385" font-family="Arial,sans-serif" font-size="15" fill="#283749">Validation Recall selection</text>
+<rect x="66" y="397" width="445" height="28" rx="5" fill="#e8edf3"/>
+<rect x="66" y="397" width="348.66" height="28" rx="5" fill="#b77a36"/>
+<line x1="409.85" y1="411" x2="419.05" y2="411" stroke="#283749" stroke-width="2"/>
+<text x="525" y="417" font-family="Arial,sans-serif" font-size="16" fill="#283749">0.8151</text>
+<text x="66" y="474" font-family="Arial,sans-serif" font-size="15" fill="#283749">Unclustered hybrid</text>
+<rect x="66" y="486" width="445" height="28" rx="5" fill="#e8edf3"/>
+<rect x="66" y="486" width="356.70" height="28" rx="5" fill="#8961aa"/>
+<line x1="421.65" y1="500" x2="423.74" y2="500" stroke="#283749" stroke-width="2"/>
+<text x="525" y="506" font-family="Arial,sans-serif" font-size="16" fill="#283749">0.8339</text>
+<text x="66" y="563" font-family="Arial,sans-serif" font-size="15" fill="#283749">Pearson UserCF</text>
+<rect x="66" y="575" width="445" height="28" rx="5" fill="#e8edf3"/>
+<rect x="66" y="575" width="369.36" height="28" rx="5" fill="#78879b"/>
+<line x1="433.85" y1="589" x2="436.83" y2="589" stroke="#283749" stroke-width="2"/>
+<text x="525" y="595" font-family="Arial,sans-serif" font-size="16" fill="#283749">0.8635</text>
+<rect x="666" y="122" width="600" height="566" rx="15" fill="#f8fafc" stroke="#e0e8f0"/>
+<text x="688" y="166" font-family="Arial,sans-serif" font-size="21" fill="#283749">Recall@10 (%) (higher better)</text>
+<text x="690" y="207" font-family="Arial,sans-serif" font-size="15" fill="#283749">Fixed KUR-CF</text>
+<rect x="690" y="219" width="445" height="28" rx="5" fill="#e8edf3"/>
+<rect x="690" y="219" width="262.35" height="28" rx="5" fill="#527aaf"/>
+<line x1="940.83" y1="233" x2="967.61" y2="233" stroke="#283749" stroke-width="2"/>
+<text x="1149" y="239" font-family="Arial,sans-serif" font-size="16" fill="#283749">2.2142</text>
+<text x="690" y="296" font-family="Arial,sans-serif" font-size="15" fill="#283749">Validation MAE selection</text>
+<rect x="690" y="308" width="445" height="28" rx="5" fill="#e8edf3"/>
+<rect x="690" y="308" width="234.95" height="28" rx="5" fill="#13847c"/>
+<line x1="916.60" y1="322" x2="933.23" y2="322" stroke="#283749" stroke-width="2"/>
+<text x="1149" y="328" font-family="Arial,sans-serif" font-size="16" fill="#283749">1.9829</text>
+<text x="690" y="385" font-family="Arial,sans-serif" font-size="15" fill="#283749">Validation Recall selection</text>
+<rect x="690" y="397" width="445" height="28" rx="5" fill="#e8edf3"/>
+<rect x="690" y="397" width="265.67" height="28" rx="5" fill="#b77a36"/>
+<line x1="936.65" y1="411" x2="979.47" y2="411" stroke="#283749" stroke-width="2"/>
+<text x="1149" y="417" font-family="Arial,sans-serif" font-size="16" fill="#283749">2.2422</text>
+<text x="690" y="474" font-family="Arial,sans-serif" font-size="15" fill="#283749">Unclustered hybrid</text>
+<rect x="690" y="486" width="445" height="28" rx="5" fill="#e8edf3"/>
+<rect x="690" y="486" width="360.67" height="28" rx="5" fill="#8961aa"/>
+<line x1="1041.18" y1="500" x2="1060.83" y2="500" stroke="#283749" stroke-width="2"/>
+<text x="1149" y="506" font-family="Arial,sans-serif" font-size="16" fill="#283749">3.0440</text>
+<text x="690" y="563" font-family="Arial,sans-serif" font-size="15" fill="#283749">Pearson UserCF</text>
+<rect x="690" y="575" width="445" height="28" rx="5" fill="#e8edf3"/>
+<rect x="690" y="575" width="236.84" height="28" rx="5" fill="#78879b"/>
+<line x1="912.91" y1="589" x2="942.90" y2="589" stroke="#283749" stroke-width="2"/>
+<text x="1149" y="595" font-family="Arial,sans-serif" font-size="16" fill="#283749">1.9989</text>
+<text x="42" y="732" font-family="Arial,sans-serif" font-size="16" fill="#60748a">Hyperparameters selected on inner validation; outer-test labels never used for tuning.</text>
+</svg>

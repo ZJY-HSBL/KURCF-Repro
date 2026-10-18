@@ -11,6 +11,7 @@ from .data import download_movielens, load_movielens, user_stratified_split
 from .evaluation import rating_metrics, ranking_metrics
 from .study import run_study
 from .nested import run_nested
+from .multiobjective import run_multiobjective
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -71,6 +72,22 @@ def build_parser() -> argparse.ArgumentParser:
     nested.add_argument("--alpha-grid", type=float, nargs="+", default=[0, 0.3, 0.6, 1.0])
     nested.add_argument("--cluster-grid", type=int, nargs="+", default=[4, 7, 10])
     nested.add_argument("--output", type=Path)
+    multi = subs.add_parser("multiobjective", help="inner-validation MAE and Recall@K selection")
+    multi.add_argument("--dataset", choices=["ml-100k", "ml-1m"], default="ml-100k")
+    multi.add_argument("--data-dir", default="data")
+    multi.add_argument("--seed", type=int, default=0)
+    multi.add_argument("--test-ratio", type=float, default=0.2)
+    multi.add_argument("--validation-ratio", type=float, default=0.2)
+    multi.add_argument("--fixed-clusters", type=int, default=7)
+    multi.add_argument("--fixed-alpha", type=float, default=0.3)
+    multi.add_argument("--neighbors", type=int, default=20)
+    multi.add_argument("--top-k", type=int, default=10)
+    multi.add_argument("--validation-ranking-users", type=int, default=0,
+                       help="0 evaluates all eligible inner-validation users")
+    multi.add_argument("--alpha-grid", type=float, nargs="+",
+                       default=[0, 0.05, 0.1, 0.3, 0.6, 1.0])
+    multi.add_argument("--cluster-grid", type=int, nargs="+", default=[2, 3, 4, 7, 10])
+    multi.add_argument("--output", type=Path)
     return p
 
 
@@ -141,7 +158,8 @@ def main(argv: list[str] | None = None) -> None:
         return
     result = (benchmark(args) if args.command == "benchmark" else
               sweep_k(args) if args.command == "sweep-k" else
-              run_study(args) if args.command == "study" else run_nested(args))
+              run_study(args) if args.command == "study" else
+              run_nested(args) if args.command == "nested" else run_multiobjective(args))
     body = json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False)
     print(body)
     if args.output:

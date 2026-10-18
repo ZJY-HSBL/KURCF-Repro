@@ -1,0 +1,85 @@
+name: MovieLens 100K multiobjective validation study
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/kurcf/multiobjective.py"
+      - "src/kurcf/objectives.py"
+      - "src/kurcf/cli.py"
+      - "scripts/summarize_multiobjective.py"
+      - ".github/workflows/movielens-multiobjective.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: movielens-multiobjective-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  experiment:
+    name: Multiobjective seed ${{ matrix.seed }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        seed: [0, 1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -e .
+      - run: kurcf download --dataset ml-100k
+      - name: Tune using inner validation, evaluate untouched outer test
+        run: |
+          kurcf multiobjective --dataset ml-100k --seed ${{ matrix.seed }} \
+            --fixed-clusters 7 --fixed-alpha 0.3 --neighbors 20 \
+            --test-ratio 0.2 --validation-ratio 0.2 --top-k 10 \
+            --validation-ranking-users 120 \
+            --alpha-grid 0 0.05 0.1 0.3 0.6 1.0 \
+            --cluster-grid 2 3 4 7 10 \
+            --output results/seed-${{ matrix.seed }}.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: multiobjective-seed-${{ matrix.seed }}
+          path: results/seed-${{ matrix.seed }}.json
+          if-no-files-found: error
+          retention-days: 90
+
+  aggregate:
+    needs: experiment
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: multiobjective-seed-*
+          merge-multiple: true
+          path: benchmarks/multiobjective/runs
+      - name: Reproduce summary and SVG from raw results
+        run: |
+          python scripts/summarize_multiobjective.py
+          python scripts/summarize_multiobjective.py --check
+      - name: Archive original results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add benchmarks/multiobjective/ assets/figures/ml100k-multiobjective.svg
+          if ! git diff --cached --quiet; then
+            git commit -m "benchmarks: archive multiobjective five-seed results"
+            git fetch origin main
+            git rebase origin/main
+            git push origin HEAD:main
+          fi

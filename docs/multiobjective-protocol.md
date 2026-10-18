@@ -30,3 +30,17 @@ alpha=0,0.05,0.1,0.3,0.6,1; use the same inner-validation
 candidate ranking population and record its size, evaluation runtime
 and split fingerprints. Only after these controls are implemented
 should five-seed results and SVG charts be published.
+
+## Implemented experimental pipeline
+
+The `kurcf multiobjective` CLI now runs the two inner-validation
+selection objectives, refits both models, and evaluates five matched
+outer-test baselines. The automated GitHub Actions workflow
+`movielens-multiobjective.yml` uses five seeds (0–4), a prespecified
+30-point grid, **120 sampled eligible inner-validation users per
+candidate**, and **all eligible outer-test users**. It archives
+original JSON, parameter choices, bootstrap intervals and an SVG
+chart after all five jobs finish. Sampling the validation population
+reduces compute, but introduces ranking-selection variance; this
+limitation must be reported alongside results. No v0.4.0 metrics are
+claimed until the workflow actually succeeds.

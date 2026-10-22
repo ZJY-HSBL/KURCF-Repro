@@ -48,7 +48,17 @@ def test_outer_test_label_mutation_cannot_change_selection(monkeypatch):
     monkeypatch.setattr("kurcf.multiobjective.load_movielens",
                         lambda *_: (modified, FEATURES))
     second = run_multiobjective(config)
-    assert first["selection"] == second["selection"]
+    # Runtime measurements fluctuate between runs and are not selection criteria.
+    def decision_fields(selection):
+        return {
+            **selection,
+            "candidates": [
+                {key: value for key, value in row.items() if key != "validation_seconds"}
+                for row in selection["candidates"]
+            ],
+        }
+
+    assert decision_fields(first["selection"]) == decision_fields(second["selection"])
     assert first["protocol"]["outer_test_sha256"] != second["protocol"]["outer_test_sha256"]
 
 
